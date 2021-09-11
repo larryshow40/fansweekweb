@@ -16,6 +16,11 @@
                             <i class="fas fa-home fa-th-large"></i>{{__('dashboard')}}
                         </a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link @yield('code')" href="{{ route('codes') }}">
+                            <i class="fas fa-fw fa-th-list"></i>Company Codes
+                        </a>
+                    </li>
                     @else
                     <li class="nav-item ">
                         <a class="nav-link @yield('home')" href="{{ route('user-account') }}">

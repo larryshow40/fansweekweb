@@ -48,6 +48,10 @@ if (!function_exists('DummyFunction')) {
             $message    ->to($user->email);
             $message    ->subject($emailTemplate->subject);
         });
+        if (Mail::failures()) {
+            // return failed mails
+            dd( new Error(Mail::failures()));
+        }
     }
 
     function sendMailTo($email, $data)

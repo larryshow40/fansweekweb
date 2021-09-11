@@ -20,29 +20,30 @@ use App\Action\Prediction\LastTenHome;
 use App\Action\Prediction\LastTenAway;
 use Illuminate\Http\Request;
 use App\CompanyCode;
-
+use App\Dislike;
+use App\Like;
 
 class HomeController extends Controller
-{ 
+{
     public function home(Request $request)
     {
         $data = (new AllPredictions())->run($request);
 
-        $codes = CompanyCode::all();
+        $codes = CompanyCode::latest()->take(5)->get();
 
         // return $data;
 
         $groups =  $data->groupBy('competition_cluster')->take(5);
 
         // return $collection;
-        $primarySection             = Cache::rememberForever('primarySection', function (){
-                                        return ThemeSection::where('is_primary', 1)->first();
-                                    });
+        $primarySection             = Cache::rememberForever('primarySection', function () {
+            return ThemeSection::where('is_primary', 1)->first();
+        });
 
 
-        if (Sentinel::check()):
+        if (Sentinel::check()) :
 
-            if($primarySection->status == 1):
+            if ($primarySection->status == 1) :
 
                 $primarySectionPosts    = Cache::remember('primarySectionPostsAuth', $seconds = 1200, function () {
                     return Post::with(['category', 'image', 'user'])
@@ -53,7 +54,7 @@ class HomeController extends Controller
                         ->orderBY('id', 'desc')
                         ->limit(10)->get();
                 });
-            else:
+            else :
 
                 $primarySectionPosts = [];
 
@@ -79,7 +80,7 @@ class HomeController extends Controller
                     ->get();
             });
 
-            $categorySections->each(function($section){
+            $categorySections->each(function ($section) {
                 $section->load('post');
             });
 
@@ -112,8 +113,8 @@ class HomeController extends Controller
                     ->count();
             });
 
-        else:
-            if($primarySection->status == 1):
+        else :
+            if ($primarySection->status == 1) :
 
                 $primarySectionPosts    = Cache::remember('primarySectionPosts', $seconds = 1200, function () {
                     return Post::with(['category', 'image', 'user'])
@@ -127,7 +128,7 @@ class HomeController extends Controller
                         })
                         ->limit(10)->get();
                 });
-            else:
+            else :
 
                 $primarySectionPosts = [];
 
@@ -156,7 +157,7 @@ class HomeController extends Controller
                     ->get();
             });
 
-            $categorySections->each(function($section){
+            $categorySections->each(function ($section) {
                 $section->load('post');
             });
 
@@ -210,24 +211,73 @@ class HomeController extends Controller
 
         $tracker->save();
 
-        return view('site.pages.home', compact('codes','groups', 'primarySection','primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
+        return view('site.pages.home', compact('codes', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
     }
 
-    public function stats($id){
+    public function companyCodes()
+    {
+        $codes = CompanyCode::paginate(10);
+        return view('site.pages.codes', compact('codes'));
+    }
+
+    public function likeCode(Request $request){
+        if (Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
+            $getLiked = false;
+        } else {
+            if($like = Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()){
+                $like->delete();
+            }else{
+                $like = new Like;
+                $like->user_id = Sentinel::getUser()->id;
+                $like->company_code_id =  $request->code_id ?? $_POST['code_id'];
+                $like->save();
+            }
+        }
+
+        $getLiked = Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->exists();
+
+        return response()->json([
+            'liked' => $getLiked
+        ]);
+    }
+
+    public function dislikeCode(Request $request)
+    {
+        if(Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()){
+            $getdisLiked = false;
+        }else{
+            if ($dislike = Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
+                $dislike->delete();
+            } else {
+                $dislike = new Dislike;
+                $dislike->user_id = Sentinel::getUser()->id;
+                $dislike->company_code_id =  $request->code_id;
+                $dislike->save();
+            }
+            $getdisLiked = Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->exists();
+        }
+        return response()->json([
+            'disliked' => $getdisLiked
+        ]);
+    }
+
+
+    public function stats($id)
+    {
 
         $head_to_head = (new HeadToHead())->run($id);
         $last_ten_away = (new LastTenAway())->run($id);
         $last_ten_home = (new LastTenHome())->run($id);
         $details = (new SinglePrediction())->run($id);
-        if(!empty($last_ten_away)){
+        if (!empty($last_ten_away)) {
             $away_results = str_split($last_ten_away['stats']['results']);
-        }else{
+        } else {
             $away_results = [];
         }
-        
-        if(!empty($last_ten_home)){
+
+        if (!empty($last_ten_home)) {
             $home_results = str_split($last_ten_home['stats']['results']);
-        }else{
+        } else {
             $home_results = [];
         }
 
@@ -237,6 +287,5 @@ class HomeController extends Controller
         // return $details;
 
         return view('site.pages.stats', compact('head_to_head', 'last_ten_away', 'last_ten_home', 'details', 'away_results', 'home_results'));
-
     }
 }

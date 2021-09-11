@@ -108,6 +108,7 @@
                 <div class="row">
                     <div class="col-12 d-md-none d-lg-none d-xl-none d-block">
                         @include('site.partials.home.betting-code')
+
                     </div>
                 </div>
             </div>
@@ -216,3 +217,5 @@
         </div>
     </div>
 </div>
+
+@include('common::addcodemodal');  

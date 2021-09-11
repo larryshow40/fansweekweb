@@ -73,6 +73,11 @@
             --primary-font: {{\Config::get('site.fonts.'.data_get(activeTheme(), 'options.fonts').'')}};
             --plyr-color-main: {{data_get(activeTheme(), 'options.primary_color')}};
         }
+
+        .clicked {
+            background-color: red !important;
+            color:white !important;
+        }
     </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ settingHelper('google_analytics_id') }}"></script>
@@ -86,6 +91,62 @@
         gtag('js', new Date());
         gtag('config', '{{ settingHelper('google_analytics_id') }}');
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+    $(document).on("click", ".likebutton", function() {
+        let id = $(this).attr("id");
+        let split = id.split("like");
+        let getID = split[split.length - 1]
+        // alert(getID)    
+        $.ajax({
+        url: "/like-code",
+        type:"POST",
+        data:{
+            "_token": "{{ csrf_token() }}",
+            "code_id":parseInt(getID)
+        },
+        success:function(response){
+            id = '#'+id;
+            if(response.liked == true){
+                $(id).addClass('clicked')
+                // $('.changeNumber'+id).text(parseInt($('.changeNumber'+id).text(), 10)+1)
+            }else{
+                $(id).removeClass('clicked')
+            }
+        },
+        error: function(response) {
+        },
+        });
+    });
+
+    $(document).on("click", ".dislikebutton", function() {
+        let id = $(this).attr("id");
+        let split = id.split("dislike");
+        let getID = split[split.length - 1]
+        // alert(getID)    
+        $.ajax({
+        url: "/dislike-code",
+        type:"POST",
+        data:{
+            "_token": "{{ csrf_token() }}",
+            "code_id":parseInt(getID)
+        },
+        success:function(response){
+            id = '#'+id;
+            if(response.disliked == true){
+                $(id).addClass('clicked')
+            }else{
+                $(id).removeClass('clicked')
+            }
+        },
+        });
+    });
+});
+
+  </script>
+  
 </head>
 {{-- dark class="sg-dark" --}}
 <body class="{{defaultModeCheck()}}">

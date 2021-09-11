@@ -2,11 +2,13 @@
 
 namespace Modules\Common\Http\Controllers;
 
+use App\CompanyCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Carbon\Carbon;
 use App\VisitorTracker;
+use Exception;
 use Modules\User\Entities\Activation;
 use Modules\Post\Entities\Post;
 use Modules\Setting\Entities\Setting;
@@ -60,6 +62,39 @@ class CommonController extends Controller
 
 
         return view('common::index', compact('data'));
+    }
+
+    public function companyCode()
+    {
+        $codes = CompanyCode::all();
+        return view('common::codes', compact('codes'));
+    }
+
+    public function storeCompanyCode(Request $request)
+    {
+        if(CompanyCode::where('code', $request->name)->exists()){
+            return redirect()->back()->with('error', 'Oops! Code exists already');;
+        }
+        $code = new CompanyCode;
+        $code->name = $request->name;
+        $code->code = $request->code;
+        $code->save();
+        return redirect()->back()->with('success', 'Added Successfully');
+    }
+
+    public function deleteCompanyCode(Request $request, $id)
+    {
+        $code = CompanyCode::find($id)->delete();
+        return redirect()->back()->with('success', 'Deleted Successfully');
+    }
+
+    public function updateCompanyCode(Request $request, $id)
+    {
+        $code = CompanyCode::find($id);
+        $code->name = $request->name;
+        $code->code = $request->code;
+        $code->save();
+        return redirect()->back()->with('success', 'Updated Successfully');
     }
 
     /**

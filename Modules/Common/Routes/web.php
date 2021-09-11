@@ -22,6 +22,10 @@ Route::group(
         Route::get('switch-language/{code}', 'GlobalController@switchLanguage')->name('switch-language');
         Route::get('select-image/{media_id}/{tableName}/{model_id}', 'GlobalController@selectImage')->name('select-image');
 
+        Route::get('/codes', 'CommonController@companyCode')->name('codes')->middleware('loginCheck');
+        Route::post('/codes', 'CommonController@storeCompanyCode')->name('code.store')->middleware('loginCheck');
+        Route::get('/code/delete/{id}', 'CommonController@deleteCompanyCode')->name('code.destroy')->middleware('loginCheck');
+        Route::post('/code/update/{id}', 'CommonController@updateCompanyCode')->name('code.update')->middleware('loginCheck');
         Route::get('/dashboard', 'CommonController@index')->name('dashboard')->middleware('loginCheck');
             Route::prefix('common')->group(function() {
 

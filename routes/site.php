@@ -13,6 +13,9 @@ Route::group(
 
     	Route::group(['middleware' => ['XSS']], function () {
 			Route::get('/', 'HomeController@home')->name('home');
+			Route::get('all-codes', 'HomeController@companyCodes')->name('all-codes');
+			Route::post('like-code', 'HomeController@likeCode');
+			Route::post('dislike-code', 'HomeController@dislikeCode');
 			Route::get('view-stats/{id}', 'HomeController@stats')->name('view.stats');
 			Route::get('all-predictions', 'PredictionController@index')->name('predictions')->middleware('loginCheck');
 			Route::get('filter/predictions', 'PredictionController@filter')->name('filter.predictions');
