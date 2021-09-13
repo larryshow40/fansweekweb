@@ -12,7 +12,7 @@ Route::group(
     function () use($page, $article){
 
     	Route::group(['middleware' => ['XSS']], function () {
-			Route::get('/', 'HomeController@home')->name('home');
+			Route::match(['get', 'post'], '/', 'HomeController@home')->name('home');
 			Route::get('all-codes', 'HomeController@companyCodes')->name('all-codes');
 			Route::post('like-code', 'HomeController@likeCode');
 			Route::post('dislike-code', 'HomeController@dislikeCode');
