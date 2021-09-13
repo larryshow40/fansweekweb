@@ -12,6 +12,7 @@
             <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">User</th>
                     <th scope="col">Company</th>
                     <th scope="col">Code</th>
                     <th scope="col">Likes/Dislikes</th>
@@ -20,6 +21,7 @@
             <tbody>
                 @foreach ($codes as $key => $code)
                     <tr>
+                        <td>{{ $code->user->first_name ?? 'N/A'}}</td>
                         <td>{{ $code->name }}</td>
                         <td>{{ $code->code }}</td>
                         <td>
@@ -31,7 +33,12 @@
                                 </form>
                             </span>
                             @else
-                                <a style="text-decoration: underline;" href="{{route('site.login.form')}}">Login To View</a>
+                                <div onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
+                                    <i class="fa fa-thumbs-up"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->likes->count()}}</span>
+                                </div>
+                                <div onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
+                                    <i class="fa fa-thumbs-down"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->dislikes->count()}}</span>
+                                </div>
                             @endif
                         </td>
                     </tr>

@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Carbon\Carbon;
 use App\VisitorTracker;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Exception;
 use Modules\User\Entities\Activation;
 use Modules\Post\Entities\Post;
@@ -76,6 +77,7 @@ class CommonController extends Controller
             return redirect()->back()->with('error', 'Oops! Code exists already');;
         }
         $code = new CompanyCode;
+        $code->user_id = Sentinel::getUser()->id;
         $code->name = $request->name;
         $code->code = $request->code;
         $code->save();
