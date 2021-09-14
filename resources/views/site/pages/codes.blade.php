@@ -33,12 +33,12 @@
                                 </form>
                             </span>
                             @else
-                                <div onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
+                                <a href="{{route('site.login.form')}}" onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
                                     <i class="fa fa-thumbs-up"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->likes->count()}}</span>
-                                </div>
-                                <div onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
+                                </a>
+                                <a href="{{route('site.login.form')}}" onclick="return confirm('Please login to proceed with this action')" class="badge badge-secondary">
                                     <i class="fa fa-thumbs-down"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->dislikes->count()}}</span>
-                                </div>
+                                </a>
                             @endif
                         </td>
                     </tr>
