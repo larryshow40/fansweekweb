@@ -132,11 +132,12 @@
         <div class="row">
             <div class="col-md-7 col-lg-8 sg-sticky">
                 <div class="theiaStickySidebar">
-                    <div class="breaking-content d-flex">
+                    {{-- <div class="breaking-content d-flex">
                         <div class="section-title">
                             <h1>Free Daily Tips and Prediction</h1>
                         </div>
-                    </div>
+                    </div> --}}
+                    <h2 style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-success">Free Daily Tips and Prediction</h2>
                     <div class="text-right">
                         <form action="" method="POST">
                             @csrf

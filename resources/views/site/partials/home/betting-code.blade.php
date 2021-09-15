@@ -4,7 +4,7 @@
     }
 </style>
 <div class="sg-widget">
-    <h3 style="font-weight:bolder; color:white;" class="widget-title bg-success">Today's Betting Codes</h3>
+    <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title bg-success">Today's Betting Codes</h3>
     <div class="card-body py-0">
         @if(Sentinel::check())
         <div class="text-right">
