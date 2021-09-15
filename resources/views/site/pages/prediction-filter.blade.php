@@ -83,51 +83,67 @@
                           
 
 
-                            <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                            <button type="submit" class="btn btn-success mb-2">Filter</button>
                         </form>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Home</th>
-                                    <th>Strength</th>
-                                    <th>Away</th>
-                                    <th>Prediction</th>
-                                    <th>Odds</th>
-                                    <th>Score</th>
-                                    <th>Stats</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                            @foreach($predictions as $data)    
-                                <tr class="table-active">
-                                    <th scope="row">{{Carbon\Carbon::parse($data['start_date'])->format('h:i')}}</th>
-                                    <td>{{$data['home_team']}}</td>
-                                    <td>{{round($data['home_strength'], 2)}} - {{round($data['away_strength'], 2)}}</td>
-                                    <td>{{$data['away_team']}}</td>
-                                    <td>{{$data['prediction']}}</td>
-                                    <td>
-                                        {{$data['odds'][$data['prediction']] ?? '-'}}
-                                    </td>
-                                    <td>
-                                        @if($data['result'])
-                                            {{$data['result']}}
-                                        @else
-                                        -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{route('view.stats', $data['id'])}}" class="btn btn-success btn-sm"> Stats</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                            @foreach($predictions as $key => $group)
+            
+                            <div class="section-title">
+                                <h3 style="color:red;">{{$key}}</h3>
+                            </div>
+                            @foreach($group->groupBy('competition_name') as $key => $subgroup) 
+                                    <div class="section-title">
+                                        <h6 style="color:red;">{{$key}}</h6>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th>Time</th>
+                                                    <th>Home</th>
+                                                    <th>Away</th>
+                                                    <th>Prediction</th>
+                                                    <th>Odds</th>
+                                                    <th>Score</th>
+                                                    <th>Stats</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                        
+                                            @foreach ($subgroup as $data)
+                                                <tr class="table-active">
+                                                    <th scope="row">{{Carbon\Carbon::parse($data['start_date'])->format('h:i')}}</th>
+                                                    <td>
+                                                        {{$data['home_team']}}
+                                                    </td>
+                                                
+                                                    <td>
+                                                        {{$data['away_team']}}
+                                                    </td>
+                                                    <td>{{$data['prediction']}}</td>
+                                                    <td>
+                                                        {{$data['odds'][$data['prediction']] ?? '-'}}
+                                                    </td>
+                                                    <td>
+                                                        @if($data['result'])
+                                                            {{$data['result']}}
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{route('view.stats', $data['id'])}}" class="btn btn-success btn-sm"> Stats</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
 
-                    </div>
+                                    </div>
+                            @endforeach                             
+                            
+                            @endforeach
                                         
                     {{$predictions->appends(request()->except('page'))->links()}}
 

@@ -75,7 +75,7 @@
         }
 
         .clicked {
-            background-color: red !important;
+            background-color: rgb(67, 176, 27) !important;
             color:white !important;
         }
     </style>

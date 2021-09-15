@@ -17,6 +17,7 @@ class PredictionController extends Controller
  public function index(){
     
     $data = (new AllPredictions())->run();
+    $data =  $data->groupBy('competition_cluster');
 
     $federations = (new ListFederations())->run();
 
@@ -32,6 +33,7 @@ class PredictionController extends Controller
 
  public function filter(Request $request){
    $data = (new AllPredictions())->filter($request);
+   $data =  $data->groupBy('competition_cluster');
 
    $federations = (new ListFederations())->run();
 

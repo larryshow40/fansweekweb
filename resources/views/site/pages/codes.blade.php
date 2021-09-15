@@ -21,7 +21,13 @@
             <tbody>
                 @foreach ($codes as $key => $code)
                     <tr>
-                        <td>{{ $code->user->first_name ?? 'N/A'}}</td>
+                        <td>
+                            @if($code->user->id == 1)
+                                <b>Fansweek</b>
+                            @else
+                            {{ $code->user->first_name}}
+                            @endif
+                        </td>
                         <td>{{ $code->name }}</td>
                         <td>{{ $code->code }}</td>
                         <td>

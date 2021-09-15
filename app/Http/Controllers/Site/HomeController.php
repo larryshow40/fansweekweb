@@ -33,7 +33,9 @@ class HomeController extends Controller
 
         // return $data;
 
-        $groups =  $data->groupBy('competition_cluster')->take(5);
+        $groups =  $data->groupBy('competition_cluster')->take(15);
+
+        // return $groups;
 
         // return $collection;
         $primarySection             = Cache::rememberForever('primarySection', function () {
