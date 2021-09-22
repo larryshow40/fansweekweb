@@ -13,13 +13,7 @@ use App\Helpers\PaginationHelper;
 use Illuminate\Http\Request;
 
 class PredictionController extends Controller
-{ 
- public function index(){
-    
-    $data = (new AllPredictions())->run();
-    $data =  $data->groupBy('competition_cluster');
-
-    $federations = (new ListFederations())->run();
+{ 4
 
     $markets = (new ListMarkets())->run();
 

@@ -1,0 +1,44 @@
+@extends('site.layouts.app')
+
+@section('content')
+<div class="sg-breaking-news">
+    <div class="container">
+        <div class="breaking-content d-flex">
+            <div class="section-title">
+                <h1>Betting Code</h1>
+            </div>
+        </div>
+    
+        <div class="card bg-dark text-white p-3">
+            <div class="col-md-12">
+                <b>Code : </b> {{$code->code}}<br/><br/
+                >
+                <b>Company Name : </b> {{$code->name}}                    
+            </div>
+        </div>
+
+        <div class="card bg-dark text-white p-3">
+            <div class="col-md-12">
+                <h4>Comments</h4>
+  
+                    @include('site.pages.commentsDisplay', ['comments' => $code->comments()->paginate(2), 'code_id' => $code->id])
+   
+                    <hr />
+                    <h4>Add comment</h4><br/>
+                    <form method="post" action="{{ route('comments.store'   ) }}">
+                        @csrf
+                        <div class="form-group">
+                            <textarea class="form-control" name="body"></textarea>
+                            <input type="hidden" name="company_code_id" value="{{ $code->id }}" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" value="Add Comment" />
+                        </div>
+                    </form>                 
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@endsection

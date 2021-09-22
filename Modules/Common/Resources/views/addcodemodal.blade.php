@@ -9,6 +9,7 @@
           </button>
         </div>
         <div class="modal-body">
+           @if(Sentinel::check())
           <form action="{{route('code.store')}}" method="POST">
               @csrf
               <div class="form-group">
@@ -23,6 +24,9 @@
 
               <input type="submit" class="btn btn-primary">
           </form>
+          @else
+            <span>Please <a class="text-success" href="{{route('site.login.form')}}">login</a> to view.</span>
+          @endif
         </div>
       </div>
     </div>

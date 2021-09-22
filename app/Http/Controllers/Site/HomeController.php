@@ -20,8 +20,10 @@ use App\Action\Prediction\LastTenHome;
 use App\Action\Prediction\LastTenAway;
 use Illuminate\Http\Request;
 use App\CompanyCode;
+use App\CompanyCodeComment;
 use App\Dislike;
 use App\Like;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -221,6 +223,11 @@ class HomeController extends Controller
         $codes = CompanyCode::paginate(10);
         return view('site.pages.codes', compact('codes'));
     }
+    public function companyCodeShow($id){
+        $code = CompanyCode::findOrFail($id);
+        return view('site.pages.show_code', compact('code'));
+
+    }
 
     public function likeCode(Request $request){
         if (Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
@@ -262,6 +269,25 @@ class HomeController extends Controller
             'disliked' => $getdisLiked
         ]);
     }
+
+    public function storeComment(Request $request)
+    {
+        // $request->validate([
+        //     'body' => 'required',
+        // ]);
+
+        if(empty($request->body)){
+            return redirect()->back()->with('error', 'Please fill the comment field');
+        }
+
+        $input = $request->all();
+        $input['user_id'] = Sentinel::getUser()->id;
+
+        CompanyCodeComment::create($input);
+
+        return back()->with('success', 'Comment Added Successfully');
+    }
+
 
 
     public function stats($id)

@@ -6,13 +6,11 @@
 <div class="sg-widget">
     <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title bg-success">Today's Betting Codes</h3>
     <div class="card-body py-0">
-        @if(Sentinel::check())
         <div class="text-right">
             <button type="button" class="btn btn-secondary mb-4" data-toggle="modal" data-target="#exampleModal">
                 Submit Code
             </button>
         </div>
-        @endif
         <div class="row mb-2 text-left">
             <div class="col-4">
                 <h6>Company</h6>

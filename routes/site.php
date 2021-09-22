@@ -14,6 +14,8 @@ Route::group(
     	Route::group(['middleware' => ['XSS']], function () {
 			Route::match(['get', 'post'], '/', 'HomeController@home')->name('home');
 			Route::get('all-codes', 'HomeController@companyCodes')->name('all-codes');
+			Route::get('code/{id}', 'HomeController@companyCodeShow')->name('code.show');
+			Route::post('comment', 'HomeController@storeComment')->name('comments.store');
 			Route::post('like-code', 'HomeController@likeCode');
 			Route::post('dislike-code', 'HomeController@dislikeCode');
 			Route::get('view-stats/{id}', 'HomeController@stats')->name('view.stats');

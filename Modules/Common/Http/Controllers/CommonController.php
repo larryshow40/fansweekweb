@@ -2,7 +2,9 @@
 
 namespace Modules\Common\Http\Controllers;
 
+use App\Comment;
 use App\CompanyCode;
+use App\CompanyCodeComment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -10,6 +12,7 @@ use Carbon\Carbon;
 use App\VisitorTracker;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Modules\User\Entities\Activation;
 use Modules\Post\Entities\Post;
 use Modules\Setting\Entities\Setting;
@@ -73,15 +76,17 @@ class CommonController extends Controller
 
     public function storeCompanyCode(Request $request)
     {
-        if(CompanyCode::where('code', $request->name)->exists()){
+        if(CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()){
             return redirect()->back()->with('error', 'Oops! Code exists already');;
+        }else{
+            $code = new CompanyCode;
+            $code->user_id = Sentinel::getUser()->id;
+            $code->name = $request->name;
+            $code->code = $request->code;
+            $code->save();
+            return redirect()->back()->with('success', 'Added Successfully');
         }
-        $code = new CompanyCode;
-        $code->user_id = Sentinel::getUser()->id;
-        $code->name = $request->name;
-        $code->code = $request->code;
-        $code->save();
-        return redirect()->back()->with('success', 'Added Successfully');
+        
     }
 
     public function deleteCompanyCode(Request $request, $id)
