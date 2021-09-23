@@ -78,6 +78,11 @@
             background-color: rgb(67, 176, 27) !important;
             color:white !important;
         }
+
+        input, select, textarea{
+            color: #ffffff;
+        }
+
     </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ settingHelper('google_analytics_id') }}"></script>
