@@ -33,7 +33,7 @@
                 <div class="row">
                     <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="col-4">{{ $code->name }}</div>
                     <div class="col-5">
-                        {{ $code->code }}                        
+                        <a style="text-decoration: none; color:lightblue;" href="{{route('code.show', $code->id)}}">{{ $code->code }}</a>                        
                     </div>
                     <div class="col-3">
                         @if(Sentinel::check())

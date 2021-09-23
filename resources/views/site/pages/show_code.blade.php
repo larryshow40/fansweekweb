@@ -11,9 +11,10 @@
     
         <div class="card bg-dark text-white p-3">
             <div class="col-md-12">
-                <b>Code : </b> {{$code->code}}<br/><br/
-                >
-                <b>Company Name : </b> {{$code->name}}                    
+                <b>Code : </b> {{$code->code}}&nbsp;&nbsp;&nbsp;
+                <b>Company Name : </b> {{$code->name}}&nbsp;&nbsp;&nbsp;
+                <a href="#" class="badge badge-secondary likebutton {{($code->likes->where('user_id', Sentinel::getUser()->id)->first()) ? 'clicked' : ''}}" id="like{{$code->id}}"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->likes->count()}}</span></a>
+                <a href="#" class="badge badge-secondary dislikebutton {{($code->dislikes->where('user_id', Sentinel::getUser()->id)->first()) ? 'clicked' : ''}}" id="dislike{{$code->id}}"><i class="fa fa-thumbs-down"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->dislikes->count()}}</span></a>          
             </div>
         </div>
 

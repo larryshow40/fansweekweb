@@ -224,8 +224,13 @@ class HomeController extends Controller
         return view('site.pages.codes', compact('codes'));
     }
     public function companyCodeShow($id){
-        $code = CompanyCode::findOrFail($id);
-        return view('site.pages.show_code', compact('code'));
+        if(Sentinel::check()){
+            $code = CompanyCode::findOrFail($id);
+            return view('site.pages.show_code', compact('code'));
+        }else{
+           return redirect()->route('site.login.form');
+        }
+        
 
     }
 
