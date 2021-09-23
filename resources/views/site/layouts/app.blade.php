@@ -80,7 +80,7 @@
         }
 
         input, select, textarea{
-            color: #ffffff;
+            color: #ffffff !important;
         }
 
     </style>
