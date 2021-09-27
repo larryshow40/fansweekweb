@@ -93,4 +93,14 @@ class ApiController extends Controller
             "data" => $comment
         ]);
     }
+
+    public function listCodes()
+    {
+        $codes = CompanyCode::paginate(10);
+        return response()->json([
+            "status" => true,
+            'message' => "COdes Retrieved Successfully",
+            "data" => $codes
+        ]);
+    }
 }
