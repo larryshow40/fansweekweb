@@ -14,9 +14,11 @@ use Illuminate\Database\Eloquent\Model;
 
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Laravel\Passport\HasApiTokens;
 
 class User extends EloquentUser implements JWTSubject
 {
+    use HasApiTokens;
     protected $fillable = [
         'first_name',
         'last_name',
