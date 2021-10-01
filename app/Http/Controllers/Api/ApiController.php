@@ -48,7 +48,6 @@ class ApiController extends Controller
                     sendMail($user, $activation->code, 'activate_account', $request->password);
 
                     return $this->returnToken($user, $request);
-                    
                 } else {
                     return response()->json([
                         "status" => false,
@@ -70,43 +69,44 @@ class ApiController extends Controller
         } catch (\Exception $e) {
             return $this->resourceError($e->getMessage());
         }
-
     }
-    public function login(Request $request){
-        try{
-        $request->validate([
-            'email'         => ['required', 'string', 'email', 'max:255'],
-            'password'      => ['required', 'string'],
-        ]);
-        $user = User::where('email', $request->email)->first();
-
-        if (blank($user)) {
-            return response()->json([
-                "status" => false,
-                'message' => "Invalid Credentials",
+    public function login(Request $request)
+    {
+        try {
+            $request->validate([
+                'email'         => ['required', 'string', 'email', 'max:255'],
+                'password'      => ['required', 'string'],
             ]);
-        } elseif ($user->is_user_banned == 0) {
-            return response()->json([
-                "status" => false,
-                'message' => "Your account has been banned.",
-            ]);
-        }
+            $user = User::where('email', $request->email)->first();
 
-        if (!Hash::check($request->get('password'), $user->password)) {
-            return response()->json([
-                "status" => false,
-                'message' => "Invalid Credentials",
-            ]);
-        }
+            if (blank($user)) {
+                return response()->json([
+                    "status" => false,
+                    'message' => "Invalid Credentials",
+                ]);
+            } elseif ($user->is_user_banned == 0) {
+                return response()->json([
+                    "status" => false,
+                    'message' => "Your account has been banned.",
+                ]);
+            }
 
-        $user = Sentinel::authenticate($request->all());
+            if (!Hash::check($request->get('password'), $user->password)) {
+                return response()->json([
+                    "status" => false,
+                    'message' => "Invalid Credentials",
+                ]);
+            }
 
-        return $this->returnToken($user, $request);
+            $user = Sentinel::authenticate($request->all());
+
+            return $this->returnToken($user, $request);
         } catch (\Exception $e) {
             return $this->resourceError($e->getMessage());
         }
     }
-    public function storeCode(Request $request){
+    public function storeCode(Request $request)
+    {
         return Sentinel::getUser()->id;
         if (CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()) {
             return redirect()->back()->with('error', 'Oops! Code exists already');;
@@ -118,7 +118,7 @@ class ApiController extends Controller
             $code->save();
             return response()->json([
                 "status" => true,
-                'message'=> "Added Successfully",
+                'message' => "Added Successfully",
                 "data" => $code
             ]);
         }
@@ -191,7 +191,7 @@ class ApiController extends Controller
 
     public function listCodes()
     {
-        $codes = CompanyCode::paginate(10);
+        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
         return response()->json([
             "status" => true,
             'message' => "Codes Retrieved Successfully",

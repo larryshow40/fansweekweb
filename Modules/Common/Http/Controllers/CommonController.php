@@ -27,10 +27,10 @@ class CommonController extends Controller
     public function index()
     {
         $data['totalVisits']               = VisitorTracker::get();
-        $data['totalUniqueVisitors']       = VisitorTracker::where('date', 'like', date('Y').'%')->get();
+        $data['totalUniqueVisitors']       = VisitorTracker::where('date', 'like', date('Y') . '%')->get();
         $count = 0;
-        foreach($data['totalUniqueVisitors']->groupBy('ip') as $key => $visitor){
-           $count += $visitor->groupBy('url')->count();
+        foreach ($data['totalUniqueVisitors']->groupBy('ip') as $key => $visitor) {
+            $count += $visitor->groupBy('url')->count();
         }
 
         $data['totalUniqueVisits']         = $count;
@@ -44,17 +44,17 @@ class CommonController extends Controller
 
         $month = date('Y-m');
         $visitors = VisitorTracker::where('date', 'like', '%' . $month . '%')->get();
-        for($i = 1; $i <= date('t'); $i++){
+        for ($i = 1; $i <= date('t'); $i++) {
             if ($i < 10) {
                 $i = str_pad($i, 2, "0", STR_PAD_LEFT);
             }
             // visits count
-            $visits                    = $visitors->where('date', date('Y-m-'.$i));
+            $visits                    = $visitors->where('date', date('Y-m-' . $i));
             $data['dates'][] = $i;
             $data['visits'][]          = $visits->count();
             //visitor count
             $data['visitors'][]        = $visits->groupBy('ip')->count();
-        } 
+        }
 
         $data['dates']                 = implode(',', $data['dates']);
         $data['visits']                = implode(',', $data['visits']);
@@ -70,23 +70,23 @@ class CommonController extends Controller
 
     public function companyCode()
     {
-        $codes = CompanyCode::all();
+        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
         return view('common::codes', compact('codes'));
     }
 
     public function storeCompanyCode(Request $request)
     {
-        if(CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()){
+        if (CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()) {
             return redirect()->back()->with('error', 'Oops! Code exists already');;
-        }else{
+        } else {
             $code = new CompanyCode;
             $code->user_id = Sentinel::getUser()->id;
             $code->name = $request->name;
             $code->code = $request->code;
+            $code->end_date = Carbon::parse($request->start_date)->format('Y-m-d H:i');;
             $code->save();
             return redirect()->back()->with('success', 'Added Successfully');
         }
-        
     }
 
     public function deleteCompanyCode(Request $request, $id)

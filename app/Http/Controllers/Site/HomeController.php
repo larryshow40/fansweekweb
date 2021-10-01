@@ -23,6 +23,7 @@ use App\CompanyCode;
 use App\CompanyCodeComment;
 use App\Dislike;
 use App\Like;
+use Carbon\Carbon;
 use Exception;
 
 class HomeController extends Controller
@@ -31,7 +32,7 @@ class HomeController extends Controller
     {
         $data = (new AllPredictions())->run($request);
 
-        $codes = CompanyCode::latest()->take(5)->get();
+        $codes = CompanyCode::latest()->where('end_date', '<=', Carbon::now()->toDateTimeString())->take(5)->get();
 
         // return $data;
 
@@ -220,27 +221,27 @@ class HomeController extends Controller
 
     public function companyCodes()
     {
-        $codes = CompanyCode::paginate(10);
+        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
         return view('site.pages.codes', compact('codes'));
     }
-    public function companyCodeShow($id){
-        if(Sentinel::check()){
+    public function companyCodeShow($id)
+    {
+        if (Sentinel::check()) {
             $code = CompanyCode::findOrFail($id);
             return view('site.pages.show_code', compact('code'));
-        }else{
-           return redirect()->route('site.login.form');
+        } else {
+            return redirect()->route('site.login.form');
         }
-        
-
     }
 
-    public function likeCode(Request $request){
+    public function likeCode(Request $request)
+    {
         if (Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
             $getLiked = false;
         } else {
-            if($like = Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()){
+            if ($like = Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
                 $like->delete();
-            }else{
+            } else {
                 $like = new Like;
                 $like->user_id = Sentinel::getUser()->id;
                 $like->company_code_id =  $request->code_id ?? $_POST['code_id'];
@@ -257,9 +258,9 @@ class HomeController extends Controller
 
     public function dislikeCode(Request $request)
     {
-        if(Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()){
+        if (Like::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
             $getdisLiked = false;
-        }else{
+        } else {
             if ($dislike = Dislike::where('company_code_id', $request->code_id)->where('user_id', Sentinel::getUser()->id)->first()) {
                 $dislike->delete();
             } else {
@@ -281,7 +282,7 @@ class HomeController extends Controller
         //     'body' => 'required',
         // ]);
 
-        if(empty($request->body)){
+        if (empty($request->body)) {
             return redirect()->back()->with('error', 'Please fill the comment field');
         }
 

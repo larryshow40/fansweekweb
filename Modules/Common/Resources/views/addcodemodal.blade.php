@@ -22,6 +22,11 @@
                 <input style="background: white !important; color:black!important;" type="text" class="form-control" name="code" id="">
               </div>
 
+              <div class="form-group">
+                <label style="color: black !important;" for="">End Date</label>
+                <input style="background: white !important; color:black!important;" type="date" class="form-control" name="date" id="">
+              </div>
+
               <input type="submit" class="btn btn-primary">
           </form>
           @else

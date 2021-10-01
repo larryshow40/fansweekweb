@@ -143,21 +143,21 @@
                             @csrf
                             <div class="btn-group mb-2" role="group" aria-label="Basic example">
                                 <input type="submit" name="yesterday" value="Yesterday" class="btn btn-secondary">
-                                <input type="submit" name="today" value="Today" class="btn btn-light">
-                                <input type="submit" name="tomorrow" value="Tomorrow" class="btn btn-info">
+                                <input type="submit" name="today" value="Today" class="btn btn-success">
+                                <input type="submit" name="tomorrow" value="Tomorrow" class="btn btn-dark">
                             </div>
                             
                         </form>
                     </div>
                     
-                    @foreach($groups as $key => $group)
+                    @foreach($groups as $mainkey => $group)
             
-                    <div class="section-title">
-                        <h3 style="color:red;">{{$key}}</h3>
-                    </div>
+                    {{-- <div class="section-title"> --}}
+                        {{-- <h3 style="color:red;">{{$key}}</h3> --}}
+                    {{-- </div> --}}
                      @foreach($group->groupBy('competition_name') as $key => $subgroup) 
                             <div class="section-title">
-                                <h6 style="color:red;">{{$key}}</h6>
+                                <h6 class="text-success">{{$mainkey}} {{$key}}</h6>
                             </div>
                             <div class="table-responsive">
                                 <table class="table ">
