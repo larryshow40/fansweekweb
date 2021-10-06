@@ -8,7 +8,7 @@
     <div class="card-body py-0">
         <div class="text-right">
             <button type="button" class="btn btn-secondary mb-4" data-toggle="modal" data-target="#exampleModal">
-                Submit Code
+                Share Code
             </button>
         </div>
         <div class="row mb-2 text-left">

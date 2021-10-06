@@ -17,7 +17,8 @@ class AllPredictions{
         }elseif($request->yesterday ?? false){
             $date = \Carbon\Carbon::yesterday()->toDateString();
         }else{
-           //
+            // $date = \Carbon\Carbon::today()->toDateString();
+           
         }
 
         $client = new Client(); //GuzzleHttp\Client
@@ -33,9 +34,13 @@ class AllPredictions{
             ]
         );
 
+
         $response = json_decode($response->getBody(),true);
 
+
+
         $data = collect($response['data']);
+        // dd($data);
 
         return $data;
     }
