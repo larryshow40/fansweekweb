@@ -192,7 +192,9 @@ class ApiController extends Controller
 
     public function listCodes()
     {
-        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
+        // $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
+        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
+
         return response()->json([
             "status" => true,
             'message' => "Codes Retrieved Successfully",
