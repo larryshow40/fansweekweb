@@ -11,6 +11,7 @@ use Modules\User\Entities\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use carbon\carbon;
 use Activation;
 
 class ApiController extends Controller
