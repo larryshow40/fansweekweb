@@ -61,6 +61,8 @@ Route::group(
                 //      update profile
                 Route::get('my-profile', 'AuthorController@myProfile')->name('site.profile');
 
+				Route::get('subscription', 'SubscriptionController@index')->name('site.subscription.index');
+
                 Route::get('author-profile-edit', 'AuthorController@myProfileEdit')->name('site.profile.form');
                 Route::post('author-profile-update', 'AuthorController@myProfileUpdate')->name('site.profile.save');
 
