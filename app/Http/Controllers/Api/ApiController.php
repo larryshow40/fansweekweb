@@ -223,7 +223,7 @@ class ApiController extends Controller
                         $subscription->customer_code = $data['customer']['customer_code'];
                         $subscription->amount = $data['amount']/100;
                         $subscription->subscription_status = $data['status'];
-                        $subscription->status = true;
+                        $subscription->status = 1;
                         $subscription->next_payment_date = $data['next_payment_date'];
                         $subscription->plan_code = $data['plan']['plan_code'];
                         $subscription->authorization = $data['authorization'];
@@ -252,7 +252,7 @@ class ApiController extends Controller
                         $transaction->status = $data['status'];
 
                         if(SubscriptionTransaction::where('email', $data['customer']['email'])->count() > 0){
-                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', true)->where('subscription_status', 'active')->first();
+                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
                             if($lastSubscription){
                                 $lastSubscription->next_payment_date = Carbon::parse($lastSubscription->next_payment_date)->addMonth();
                                 $lastSubscription->update();
@@ -275,10 +275,10 @@ class ApiController extends Controller
 
                         DB::beginTransaction();
           
-                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', true)->where('subscription_status', 'active')->first();
+                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
                             if ($lastSubscription) {
                                 $lastSubscription->subscription_status = 'cancelled';
-                                $lastSubscription->status = false;
+                                $lastSubscription->status = 0;
                                 $lastSubscription->update();
                             }
                         DB::commit();

@@ -18,7 +18,7 @@ class PremiumUserMiddleware
     public function handle($request, Closure $next)
     {
         $hasSubscription = Subscription::where('user_id', Sentinel::getUser()->id)->latest()->first();
-        if ($hasSubscription && $hasSubscription->status == true) {
+        if ($hasSubscription && $hasSubscription->status == 1) {
             return $next($request);
         } else {
             // abort(404);
