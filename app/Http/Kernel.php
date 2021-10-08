@@ -76,7 +76,7 @@ class Kernel extends HttpKernel
         'IsNotInstalledCheck'   => \Modules\Installer\Http\Middleware\CheckNotInstalledMiddleware::class,
         'XSS'                   => \App\Http\Middleware\XSS::class,
         'CheckApiKey'           => \Modules\Api\Http\Middleware\CheckAppKeyMiddleware::class,
-
+        'PremiumUser'   => \App\Http\Middleware\PremiumUserMiddleware::class
     ];
 
     /**

@@ -19,7 +19,7 @@ Route::group(
 			Route::post('like-code', 'HomeController@likeCode');
 			Route::post('dislike-code', 'HomeController@dislikeCode');
 			Route::get('view-stats/{id}', 'HomeController@stats')->name('view.stats');
-			Route::get('all-predictions', 'PredictionController@index')->name('predictions')->middleware('loginCheck');
+			Route::get('all-predictions', 'PredictionController@index')->name('predictions')->middleware('loginCheck', 'PremiumUser');
 			Route::get('filter/predictions', 'PredictionController@filter')->name('filter.predictions');
 			//start auth route
 			Route::get('/login', 'UserController@showLoginForm')->name('site.login.form');
@@ -62,6 +62,8 @@ Route::group(
                 Route::get('my-profile', 'AuthorController@myProfile')->name('site.profile');
 
 				Route::get('subscription', 'SubscriptionController@index')->name('site.subscription.index');
+				Route::post('subscribe', 'SubscriptionController@subscribe')->name('site.subscription.subscribe');
+				Route::get('paystack/callback', 'SubscriptionController@handleCallback')->name('site.subscription.callback');
 
                 Route::get('author-profile-edit', 'AuthorController@myProfileEdit')->name('site.profile.form');
                 Route::post('author-profile-update', 'AuthorController@myProfileUpdate')->name('site.profile.save');
