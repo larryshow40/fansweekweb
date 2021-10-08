@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Submit Code</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Share Code</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -30,7 +30,7 @@
               <input type="submit" class="btn btn-primary">
           </form>
           @else
-            <span>Please <a class="text-success" href="{{route('site.login.form')}}">login</a> to view.</span>
+            <span>Please <a class="text-success" href="{{route('site.login.form')}}">login</a> to share Codes.</span>
           @endif
         </div>
       </div>

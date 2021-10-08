@@ -11,6 +11,7 @@ use Modules\User\Entities\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use carbon\carbon;
 use Activation;
 
 class ApiController extends Controller
@@ -191,7 +192,9 @@ class ApiController extends Controller
 
     public function listCodes()
     {
-        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
+        // $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
+        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
+
         return response()->json([
             "status" => true,
             'message' => "Codes Retrieved Successfully",
