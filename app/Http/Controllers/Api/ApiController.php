@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use carbon\carbon;
 use Activation;
+use App\Http\Resources\CompanyCodeResource;
 use App\Subscription;
 use App\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
@@ -196,13 +197,13 @@ class ApiController extends Controller
     public function listCodes()
     {
         // $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
-        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
-
-        return response()->json([
-            "status" => true,
-            'message' => "Codes Retrieved Successfully",
-            "data" => $codes
-        ]);
+        $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
+        return CompanyCodeResource::collection($codes);
+        // return response()->json([
+        //     "status" => true,
+        //     'message' => "Codes Retrieved Successfully",
+        //     "data" => $codes
+        // ]);
     }
 
     public function paystackWebhook(Request $request)
