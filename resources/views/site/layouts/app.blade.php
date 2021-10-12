@@ -154,7 +154,7 @@ $( document ).ready(function() {
   
 </head>
 {{-- dark class="sg-dark" --}}
-<body class="{{defaultModeCheck()}}">
+{{-- <body class="{{defaultModeCheck()}}"> --}}
 <div id="switch-mode" class="{{defaultModeCheck() == 'sg-dark'? 'active':''}}">
     <div class="sm-text">{{__('dark_mode')}}</div>
     <div class="sm-button">
