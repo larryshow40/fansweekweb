@@ -16,6 +16,7 @@ use Activation;
 use App\Http\Resources\CompanyCodeResource;
 use App\Subscription;
 use App\SubscriptionTransaction;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
@@ -294,7 +295,72 @@ class ApiController extends Controller
                     break;
                 default:
             }
+
+
         // }
     }
+
+    public function testwebhook(){
+        $client = new Client(); 
+        $response = $client->post(
+            'https://fansweek.com/api/paystack/webhook',
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' =>'Bearer '.config('paystack.secretKey'),
+                ],
+
+                'json' => [
+                    "event" => "subscription.create",
+                    "data" => [
+                        "domain" => "test",
+                        "status" => "active",
+                        "subscription_code" => "SUB_20810j9og1hw2sy",
+                        "amount" => 50000,
+                        "cron_expression" => "0 0 28 * *",
+                        "next_payment_date" => "2016-05-19T07:00:00.000Z",
+                        "open_invoice" => null,
+                        "createdAt" => "2016-03-20T00:23:24.000Z",
+                        "plan" => [
+                            "name" => "Monthly retainer",
+                            "plan_code" => "PLN_8wa5t89ms15a8en",
+                            "description" => null,
+                            "amount" => 100,
+                            "interval" => "monthly",
+                            "send_invoices" => true,
+                            "send_sms" => true,
+                            "currency" => "NGN"
+                        ],
+                        "authorization" => [
+                            "authorization_code" => "AUTH_96xphygz",
+                            "bin" => "539983",
+                            "last4" => "7357",
+                            "exp_month" => "10",
+                            "exp_year" => "2017",
+                            "card_type" => "MASTERCARD DEBIT",
+                            "bank" => "GTBANK",
+                            "country_code" => "NG",
+                            "brand" => "MASTERCARD",
+                            "account_name" => "BoJack Horseman"
+                        ],
+                        "customer" => [
+                            "first_name" => "BoJack",
+                            "last_name" => "Horseman",
+                            "email" => "lanreshorinwa@gmail.com",
+                            "customer_code" => "CUS_xnxdt6s1zg1f4nx",
+                            "phone" => "",
+                            "metadata" => [],
+                            "risk_action" => "default"
+                        ],
+                        "created_at" => "2016-10-01T10:59:59.000Z"
+                    ] 
+                ]
+
+            ]
+        );
+        return json_decode($response->getBody(), true);
+    }
+
+
 
 }
