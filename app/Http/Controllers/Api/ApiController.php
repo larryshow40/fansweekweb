@@ -17,6 +17,7 @@ use App\Http\Resources\CompanyCodeResource;
 use App\Subscription;
 use App\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
+use App\Action\Subscription\VerifyTransaction;
 
 class ApiController extends Controller
 {
@@ -295,6 +296,11 @@ class ApiController extends Controller
                 default:
             }
         // }
+    }
+
+    public function paystackCallback(Request $request)
+    {
+       return VerifyTransaction::verify($request);
     }
 
 }
