@@ -17,8 +17,8 @@ class CreateSubscription{
 
                 'json' => [
                     "email" => Sentinel::getUser()->email,
-                    "amount" => 1000 * 100,
-                    "plan"=> "PLN_xc3curswwx9blik" 
+                    "amount" => 100 * 100,
+                    "plan"=> "PLN_8wa5t89ms15a8en" 
                 ]
 
             ]

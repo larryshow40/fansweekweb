@@ -18,6 +18,7 @@ use App\Subscription;
 use App\SubscriptionTransaction;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
+use App\Action\Subscription\VerifyTransaction;
 
 class ApiController extends Controller
 {
@@ -362,5 +363,10 @@ class ApiController extends Controller
     }
 
 
+
+    public function paystackCallback(Request $request)
+    {
+       return VerifyTransaction::verify($request);
+    }
 
 }

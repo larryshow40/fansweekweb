@@ -25,5 +25,9 @@ Route::post('dislike-code', 'ApiController@dislikeCode');
 Route::post('store-comment', 'ApiController@storeComment');
 Route::get('list-codes', 'ApiController@listCodes');
 Route::post('paystack/webhook', 'ApiController@paystackWebhook');
+<<<<<<< HEAD
 Route::get('test/paystack/webhook', 'ApiController@testwebhook');
+=======
+Route::get('paystack/callback', 'ApiController@paystackCallback');
+>>>>>>> 7e6c282c12e822436e449cd902255e7441c80c7f
 
