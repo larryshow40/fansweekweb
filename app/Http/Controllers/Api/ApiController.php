@@ -231,6 +231,15 @@ class ApiController extends Controller
                         $subscription->plan_code = $data['plan']['plan_code'];
                         $subscription->authorization = $data['authorization'];
                         $subscription->save();
+
+                        $transaction = new SubscriptionTransaction();
+                        $transaction->reference = $data['subscription_code'];
+                        $transaction->user_id = User::firstWhere('email', $data['customer']['email'])->id;
+                        $transaction->amount = $data['amount'] / 100;
+                        $transaction->paid_at = $data['createdAt'];
+                        $transaction->email = $data['customer']['email'];
+                        $transaction->status = $data['status'];
+                        $transaction->save();
                         DB::commit();
                         return response()->json([
                             'message' => 'Subscription Created Successfully',
@@ -246,19 +255,6 @@ class ApiController extends Controller
                         $data = $paymentDetails['data'];
 
                         DB::beginTransaction();
-
-                        $subscription = new Subscription();
-                        $subscription->subscription_code = "SUB_uvitlw9ghcrdl8w";
-                        $subscription->customer_email = "lanreshorinwa@gmail.com";
-                        $subscription->user_id = User::firstWhere('email', "lanreshorinwa@gmail.com")->id;
-                        $subscription->customer_code = $data['customer']['customer_code'];
-                        $subscription->amount = $data['amount']/100;
-                        $subscription->subscription_status = $data['status'];
-                        $subscription->status = 1;
-                        $subscription->next_payment_date = "2021-10-14";
-                        $subscription->plan_code = "PLN_8wa5t89ms15a8en";
-                        $subscription->authorization = $data['authorization'];
-                        $subscription->save();
 
                         $transaction = new SubscriptionTransaction();
                         $transaction->reference = $data['reference'];
