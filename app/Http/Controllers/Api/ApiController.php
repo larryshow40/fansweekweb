@@ -366,7 +366,7 @@ class ApiController extends Controller
 
     public function paystackCallback(Request $request)
     {
-       return VerifyTransaction::verify($request);
+       return VerifyTransaction::verify($request->reference);
     }
 
 }
