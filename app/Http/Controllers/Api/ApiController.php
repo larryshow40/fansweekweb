@@ -379,4 +379,8 @@ class ApiController extends Controller
        return VerifyTransaction::verify($request->reference);
     }
 
+    public function testing(){
+        dd(Subscription::all(), SubscriptionTransaction::all());
+    }
+
 }
