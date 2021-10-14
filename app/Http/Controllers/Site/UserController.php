@@ -138,9 +138,12 @@ class UserController extends Controller
 
             $activation         = Activation::create($user);
 
-            sendMail($user, $activation->code, 'activate_account', $request->password);
+            return $this->activation($request->email, $activation->code);
 
-            return redirect()->route('site.login.form')->with('success', __('check_user_mail_for_active_this_account'));
+
+            // sendMail($user, $activation->code, 'activate_account', $request->password);
+
+            // return redirect()->route('site.login.form')->with('success', __('check_user_mail_for_active_this_account'));
 
 
 
