@@ -16,12 +16,12 @@ class CompanyCodeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name ' => $this->name,
-            'code ' => $this->code,
-            'end_date ' => $this->end_date,
-            'likes_count ' => $this->likes_count,
-            'dislikes_count ' => $this->dislikes_count,
-            'user ' => $this->user->first_name,
+            'name' => $this->name,
+            'code' => $this->code,
+            'end_date' => $this->end_date,
+            'likes_count' => $this->likes_count,
+            'dislikes_count' => $this->dislikes_count,
+            'user' => $this->user->first_name,
         ];
     }
 }
