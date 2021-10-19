@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Action\Subscription\CreatePlan;
-use App\Action\Subscription\InitializeSubscription;
+use App\Action\Subscription\InitializeTransaction;
 use App\Action\Subscription\VerifyTransaction;
 use App\Http\Controllers\Controller;
 use App\Subscription;
@@ -25,7 +25,7 @@ class SubscriptionController extends Controller
 
     public function subscribe(){
         // return CreatePlan::create();
-        return redirect()->away(InitializeSubscription::initialize()['data']['authorization_url']);
+        return redirect()->away(InitializeTransaction::initialize()['data']['authorization_url']);
     }
 
     public function handleCallback(Request $request){
