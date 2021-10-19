@@ -333,13 +333,12 @@ class ApiController extends Controller
                         $transaction->paid_at = $data['paid_at'];
                         $transaction->email = $data['customer']['email'];
                         $transaction->status = $data['status'];
+                        
+                        $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
 
-                        if(SubscriptionTransaction::where('email', $data['customer']['email'])->count() > 0){
-                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
-                            if($lastSubscription){
+                        if($lastSubscription){
                                 $lastSubscription->next_payment_date = Carbon::parse($lastSubscription->next_payment_date)->addMonth();
                                 $lastSubscription->update();
-                            }
                         }else{
                             CreateSubscription::create($data['customer']['email']);
                         }
