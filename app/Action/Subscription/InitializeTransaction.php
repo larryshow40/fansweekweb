@@ -1,0 +1,27 @@
+<?php
+namespace App\Action\Subscription;
+
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use GuzzleHttp\Client;
+
+class InitializeTransaction{
+    public static function initialize(){
+        $client = new Client(); //GuzzleHttp\Client
+        $response = $client->post(
+            'https://api.paystack.co/transaction/initialize',
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' =>'Bearer '.config('paystack.secretKey'),
+                ],
+
+                'json' => [
+                    "customer" => Sentinel::getUser()->email,
+                    "plan"=> "PLN_8wa5t89ms15a8en" 
+                ]
+
+            ]
+        );
+        return json_decode($response->getBody(), true);
+    }
+}
