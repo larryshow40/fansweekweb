@@ -16,8 +16,8 @@ class InitializeTransaction{
                 ],
 
                 'json' => [
-                    "customer" => Sentinel::getUser()->email,
-                    "plan"=> "PLN_8wa5t89ms15a8en" 
+                    "email" => Sentinel::getUser()->email,
+                    "amount"=> 100*100
                 ]
 
             ]
