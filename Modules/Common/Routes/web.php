@@ -23,6 +23,8 @@ Route::group(
         Route::get('select-image/{media_id}/{tableName}/{model_id}', 'GlobalController@selectImage')->name('select-image');
 
         Route::get('/codes', 'CommonController@companyCode')->name('codes')->middleware('loginCheck');
+        Route::get('/subscriptions', 'CommonController@subscriptions')->name('user-subscriptions')->middleware('loginCheck');
+        Route::get('/subscription/{id}', 'CommonController@cancelSubscription')->name('cancel.subscription')->middleware('loginCheck');
         Route::post('/codes', 'CommonController@storeCompanyCode')->name('code.store')->middleware('loginCheck');
         Route::get('/code/delete/{id}', 'CommonController@deleteCompanyCode')->name('code.destroy')->middleware('loginCheck');
         Route::post('/code/update/{id}', 'CommonController@updateCompanyCode')->name('code.update')->middleware('loginCheck');

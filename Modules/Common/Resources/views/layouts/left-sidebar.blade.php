@@ -21,6 +21,13 @@
                             <i class="fas fa-fw fa-th-list"></i>Company Codes
                         </a>
                     </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ route('user-subscriptions') }}">
+                            <i class="fas fa-fw fa-th-list"></i>Subscriptions
+                        </a>
+                    </li>
+
                     @else
                     <li class="nav-item ">
                         <a class="nav-link @yield('home')" href="{{ route('user-account') }}">

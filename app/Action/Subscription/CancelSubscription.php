@@ -19,5 +19,7 @@ class CancelSubscription{
                 ]
             ]
         );
+
+        return json_decode($response->getBody(), true);
     }
 }

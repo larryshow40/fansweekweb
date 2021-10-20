@@ -2,9 +2,11 @@
 
 namespace Modules\Common\Http\Controllers;
 
+use App\Action\Subscription\CancelSubscription;
 use App\Comment;
 use App\CompanyCode;
 use App\CompanyCodeComment;
+use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -13,6 +15,7 @@ use App\VisitorTracker;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\User\Entities\Activation;
 use Modules\Post\Entities\Post;
 use Modules\Setting\Entities\Setting;
@@ -72,6 +75,30 @@ class CommonController extends Controller
     {
         $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
         return view('common::codes', compact('codes'));
+    }
+
+    public function subscriptions()
+    {
+        $subscriptions = Subscription::paginate(10);
+        return view('common::subscriptions', compact('subscriptions'));
+    }
+
+    public function cancelSubscription($id){
+        try{
+            DB::beginTransaction();
+            $subscription = Subscription::find($id);
+
+            if ($subscription) {
+                $subscription->subscription_status = 'cancelled';
+                $subscription->status = 0;
+                $subscription->update();
+                CancelSubscription::cancel($subscription->subscription_code, $subscription->email_token);
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Cancelled Successfully');
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function storeCompanyCode(Request $request)
