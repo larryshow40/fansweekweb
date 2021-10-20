@@ -25,6 +25,7 @@
                             <th scope="col">Amount</th>
                             <th scope="col">Status</th>
                             <th scope="col">Next Payment Date</th>
+                            <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,6 +36,9 @@
                                     <td>{{$subscription->amount}}</td>
                                     <td>{{$subscription->status == 1 ? 'Active' : 'Cancelled'}}</td>
                                     <td>{{$subscription->next_payment_date}}</td>
+                                    <td>
+                                        <a class="btn btn-danger" href="{{route('cancel.subscription', $subscription->id)}}"> Cancel </a>
+                                    </td>
                                 </tr>
                            @endforeach
                         </tbody>
