@@ -15,6 +15,8 @@
                 <b>Company Name : </b> {{$code->name}}&nbsp;&nbsp;&nbsp;
                 <a href="#" class="badge badge-secondary likebutton {{($code->likes->where('user_id', Sentinel::getUser()->id)->first()) ? 'clicked' : ''}}" id="like{{$code->id}}"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->likes->count()}}</span></a>
                 <a href="#" class="badge badge-secondary dislikebutton {{($code->dislikes->where('user_id', Sentinel::getUser()->id)->first()) ? 'clicked' : ''}}" id="dislike{{$code->id}}"><i class="fa fa-thumbs-down"></i>&nbsp;<span class="changeNumber{{$code->id}}">{{$code->dislikes->count()}}</span></a>          
+                <br/><span>By:</span> {{$code->user->first_name}}
+                
             </div>
         </div>
 

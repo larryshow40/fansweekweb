@@ -1,9 +1,11 @@
 @foreach($comments as $comment)
     <div class="display-comment" @if($comment->parent_id != null) style="margin-left:40px;" @endif>
-        <strong>{{ $comment->user->name }}</strong>
-        <p>{{ $comment->body }}</p>
+        <strong>{{ $comment->user->first_name }}-</strong>
+        <span>{{ $comment->body }}</span>
+        <br/>
+        <small>{{$comment->created_at->diffForHumans()}}</small>
         <a href="" id="reply"></a>
-        <form method="post" action="{{ route('comments.store') }}">
+        <form class="mt-3" method="post" action="{{ route('comments.store') }}">
             @csrf
             <div class="form-group">
                 <input type="text" name="body" class="form-control" />

@@ -31,9 +31,9 @@
         <div class="card bg-dark mb-1" style="color:white;">
             <div class="card-body py-2">
                 <div class="row">
-                    <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="col-4">{{ $code->name }}</div>
+                    <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" class="col-4">{{ $code->name }}<br/>By:</div>
                     <div class="col-5">
-                        <a style="text-decoration: none; color:lightblue;" href="{{route('code.show', $code->id)}}">{{ $code->code }}</a>                        
+                        <a style="text-decoration: none; color:lightblue;" href="{{route('code.show', $code->id)}}">{{ $code->code }}<br/><i style="color: white;">{{$code->user->first_name}}</i></a>                        
                     </div>
                     <div class="col-3">
                         @if(Sentinel::check())

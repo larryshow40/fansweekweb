@@ -18,10 +18,11 @@ class CompanyCodeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'end_date' => $this->end_date,
+            'end_date' => $this->end_date->toDateDayString(),
             'likes_count' => $this->likes_count,
             'dislikes_count' => $this->dislikes_count,
             'user' => $this->user->first_name,
+            'created_at' => $this->created_at->toDateDayString(),
         ];
     }
 }
