@@ -116,9 +116,11 @@ $( document ).ready(function() {
             id = '#'+id;
             if(response.liked == true){
                 $(id).addClass('clicked')
-                // $('.changeNumber'+id).text(parseInt($('.changeNumber'+id).text(), 10)+1)
+                $(id).find( "span" ).text(parseInt($(id).text()) + 1)
+                
             }else{
                 $(id).removeClass('clicked')
+                $(id).find( "span" ).text(parseInt($(id).text()) - 1)
             }
         },
         error: function(response) {
