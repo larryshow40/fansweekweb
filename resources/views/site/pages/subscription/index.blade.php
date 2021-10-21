@@ -10,6 +10,35 @@
         </div>
 
         <div class="row">
+            @if ($activeSubscription === 0)               
+            <div class="col-md-6">
+                <div class="card text-white border-primary mb-3">
+                    <div class="card-header bg-primary text-center">Regular</div>
+                    <div class="card-body text-primary">
+                        <div class="card-text mb-2 ">
+                            <span>FREE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card text-white border-success mb-3">
+                    <div class="card-header bg-success text-center">Premium</div>
+                    <div class="card-body text-success">
+                        <div class="card-text">
+                            <form action="{{route('site.subscription.subscribe')}}"  method="POST">
+                                @csrf
+                                <span>NGN 1,000</span>&nbsp;
+                                <button type="submit" class="btn btn-sm btn-success">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            
             @if($subscriptions->count() > 0)
             <div class="col-md-12">
                 <div class="section-title">
@@ -37,7 +66,11 @@
                                     <td>{{$subscription->status == 1 ? 'Active' : 'Cancelled'}}</td>
                                     <td>{{$subscription->next_payment_date}}</td>
                                     <td>
-                                        <a class="btn btn-danger" href="{{route('cancel.subscription', $subscription->id)}}"> Cancel </a>
+                                        @if ($subscription->status == 1)
+                                            <a class="btn btn-danger" href="{{route('cancel.subscription', $subscription->id)}}"> Cancel </a>
+                                        @else
+                                            <span class="text-success">Cancelled</span>
+                                        @endif
                                     </td>
                                 </tr>
                            @endforeach
@@ -47,33 +80,7 @@
                 </div>
             </div>
             @endif
-           @if ($activeSubscription === 0)               
-            <div class="col-md-6">
-                <div class="card text-white border-primary mb-3">
-                    <div class="card-header bg-primary text-center">Regular</div>
-                    <div class="card-body text-primary">
-                        <div class="card-text mb-2 ">
-                            <span>FREE</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card text-white border-success mb-3">
-                    <div class="card-header bg-success text-center">Premium</div>
-                    <div class="card-body text-success">
-                        <div class="card-text">
-                            <form action="{{route('site.subscription.subscribe')}}"  method="POST">
-                                @csrf
-                                <span>NGN 1,000</span>&nbsp;
-                                <button type="submit" class="btn btn-sm btn-success">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
+           
         </div>
 
 
