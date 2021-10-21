@@ -28,11 +28,5 @@ class SubscriptionController extends Controller
         return redirect()->away(InitializeTransaction::initialize()['data']['authorization_url']);
     }
 
-    public function handleCallback(Request $request){
-        if(VerifyTransaction::verify($request->reference)['data']['status'] == "success"){
-            return redirect()->route('home')->with('success','Subscription Successful');
-        }else{
-            return redirect()->route('home')->with('error','Something went wrong, Please try again!');
-        }
-    }
+    
 }

@@ -445,7 +445,11 @@ class ApiController extends Controller
 
     public function paystackCallback(Request $request)
     {
-       return VerifyTransaction::verify($request->reference);
+        if (VerifyTransaction::verify($request->reference)['data']['status'] == "success") {
+            return redirect()->route('home')->with('success', 'Subscription Successful');
+        } else {
+            return redirect()->route('home')->with('error', 'Something went wrong, Please try again!');
+        }    
     }
 
     public function testing(){
