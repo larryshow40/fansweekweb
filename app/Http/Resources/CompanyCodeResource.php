@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class CompanyCodeResource extends JsonResource
 {
