@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class CompanyCodeResource extends JsonResource
 {
@@ -25,7 +26,7 @@ class CompanyCodeResource extends JsonResource
             'dislikes_count' => $this->dislikes_count,
             'user' => $this->user->first_name,
             'liked' => $this->likes->where('user_id', Sentinel::getUser()->id)->first() ? true : false ,
-            'liked' => $this->dislikes->where('user_id', Sentinel::getUser()->id)->first() ? true : false ,
+            'disliked' => $this->dislikes->where('user_id', Sentinel::getUser()->id)->first() ? true : false ,
             'created_at' => Carbon::parse($this->created_at)->format('d F'),
         ];
     }
