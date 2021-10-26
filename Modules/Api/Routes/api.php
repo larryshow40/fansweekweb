@@ -14,41 +14,40 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('v10')->group(function() {
+Route::prefix('v10')->group(function () {
 
-     Route::post('registers', 'UserController@register');
-     Route::post('forgot-password', 'UserController@forgotPassword');
-     Route::post('login', 'UserController@authenticate');
-     //firebase authentication
-     Route::post('firebase-auth', 'UserController@firebaseAuth');
+    Route::post('registers', 'UserController@register');
+    Route::post('forgot-password', 'UserController@forgotPassword');
+    Route::post('login', 'UserController@authenticate');
+    //firebase authentication
+    Route::post('firebase-auth', 'UserController@firebaseAuth');
 
-     Route::group(['middleware' => ['jwt.verify','loginCheck','api.localization','CheckApiKey']], function() {
+    Route::group(['middleware' => ['jwt.verify', 'loginCheck', 'api.localization', 'CheckApiKey']], function () {
 
-         //UserControler
-         Route::prefix('user')->group(function() {
+        //UserControler
+        Route::prefix('user')->group(function () {
 
-             Route::get('me', 'UserController@getAuthenticatedUser');
-             Route::get('logout', 'UserController@logout');
-             Route::post('change-password', 'UserController@changePassword');
+            Route::get('me', 'UserController@getAuthenticatedUser');
+            Route::get('logout', 'UserController@logout');
+            Route::post('change-password', 'UserController@changePassword');
 
-             Route::post('update-profile', 'UserController@updateUserInfo');
+            Route::post('update-profile', 'UserController@updateUserInfo');
 
-             Route::get('user-details-by-id', 'UserController@userDetailsById');
-             Route::get('user-details-by-email', 'UserController@userDetailsByemail');
-             Route::post('set-password', 'UserController@setPassword');
-             Route::post('deactivate-account', 'UserController@deactivateAccount');
-             Route::get('test', 'UserController@test');
-         });
+            Route::get('user-details-by-id', 'UserController@userDetailsById');
+            Route::get('user-details-by-email', 'UserController@userDetailsByemail');
+            Route::post('set-password', 'UserController@setPassword');
+            Route::post('deactivate-account', 'UserController@deactivateAccount');
+            Route::get('test', 'UserController@test');
+        });
 
-         Route::post('save-comment', 'CommentController@save');
-         Route::post('save-comment-reply', 'CommentController@saveReply');
-     });
+        Route::post('save-comment', 'CommentController@save');
+        Route::post('save-comment-reply', 'CommentController@saveReply');
+    });
 
-    Route::group(['middleware' => ['api.localization', 'CheckApiKey']], function() {
+    Route::group(['middleware' => ['api.localization', 'CheckApiKey']], function () {
         //HomeController
-        Route::prefix('home')->group(function() {
+        Route::prefix('home')->group(function () {
             Route::get('/content', 'HomeController@homeContent');
-
         });
         //SettingsController
         Route::get('/settings', 'SettingsController@settings');
@@ -85,5 +84,4 @@ Route::prefix('v10')->group(function() {
         //search
         Route::get('/search', 'PostController@searchPost');
     });
-
 });
