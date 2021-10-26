@@ -158,7 +158,7 @@ $( document ).ready(function() {
 {{-- dark class="sg-dark" --}}
 <body class="{{defaultModeCheck()}}">
 {{-- <div id="switch-mode" class="{{defaultModeCheck() == 'sg-dark'? 'active':''}}"> --}}
-    <div class="sm-text">{{__('dark_mode')}}</div>
+    {{-- <div class="sm-text">{{__('dark_mode')}}</div> --}}
     <div class="sm-button">
         <input type="hidden" id="url" value="{{url('/')}}">
         <span></span>

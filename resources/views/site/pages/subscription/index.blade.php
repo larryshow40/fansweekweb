@@ -13,10 +13,28 @@
             @if ($activeSubscription === 0)               
             <div class="col-md-6">
                 <div class="card text-white border-primary mb-3">
-                    <div class="card-header bg-primary text-center">Regular</div>
+                    <div class="card-header bg-primary text-center">FREE - Regular</div>
                     <div class="card-body text-primary">
                         <div class="card-text mb-2 ">
-                            <span>FREE</span>
+                            <span>&#9989; Betting codes </span><br>
+                            <span>&#9989; Access to 1X2 Markets </span><br>
+                            <span>&#9989; Share Betting Codes </span><br>
+                            <span>&#9989; Access to 1X2 Markets </span><br>
+                            <span>&#10060;Email Notification  </span><br>
+                            <span>&#10060; SMS</span><br>
+                            <span>&#10060; OVER 0.5</span><br>
+                            <span>&#10060; OVER 1.5</span><br>
+                            <span>&#10060; OVER 2.5</span><br>
+                            <span>&#10060; GG</span><br>
+                            {{-- <span>&#10060; </span><br> --}}
+
+
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -24,13 +42,30 @@
 
             <div class="col-md-6">
                 <div class="card text-white border-success mb-3">
-                    <div class="card-header bg-success text-center">Premium</div>
+                    <div class="card-header bg-success text-center">N1,000 - Premium</div>
                     <div class="card-body text-success">
                         <div class="card-text">
                             <form action="{{route('site.subscription.subscribe')}}"  method="POST">
                                 @csrf
-                                <span>NGN 1,000</span>&nbsp;
-                                <button type="submit" class="btn btn-sm btn-success">Subscribe</button>
+                                <span>&#9989; Access to 20 League Games </span><br>
+                            <span>&#9989; Betting codes </span><br>
+                            <span>&#9989; Access to 1X2 Markets </span><br>
+                            <span>&#9989; Share Betting Codes </span><br>
+                            <span>&#9989; Access to 1X2 Markets </span><br>
+                            <span>&#9989;Email Notification  </span><br>
+                            <span>&#9989; SMS</span><br>
+                            <span>&#9989; OVER 0.5</span><br>
+                            <span>&#9989; OVER 1.5</span><br>
+                            <span>&#9989; OVER 2.5</span><br>
+                            <span>&#9989; GG</span><br> <br>
+                            {{-- <span>&#9989; </span><br> --}}
+
+
+                            
+
+
+                                {{-- <span>NGN 1,000</span>&nbsp; --}}
+                                <button type="submit" class="btn btn-sm btn-success">Subscribe Now</button>
                             </form>
                         </div>
                     </div>
