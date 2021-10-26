@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\FreeSubscription;
 use App\Subscription;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Closure;
@@ -19,6 +20,8 @@ class PremiumUserMiddleware
     {
         $hasSubscription = Subscription::where('user_id', Sentinel::getUser()->id)->latest()->first();
         if ($hasSubscription && $hasSubscription->status == 1) {
+            return $next($request);
+        }elseif(FreeSubscription::where("user_id", Sentinel::getUser()->id)->first()){
             return $next($request);
         } else {
             // abort(404);

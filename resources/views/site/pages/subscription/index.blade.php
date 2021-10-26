@@ -69,7 +69,7 @@
                                         @if ($subscription->status == 1)
                                             <a class="btn btn-danger" href="{{route('cancel.subscription', $subscription->id)}}"> Cancel </a>
                                         @else
-                                            <span class="text-success">Cancelled</span>
+                                            <span class="text-danger">Cancelled</span>
                                         @endif
                                     </td>
                                 </tr>

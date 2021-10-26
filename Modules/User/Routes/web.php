@@ -26,6 +26,7 @@ Route::group(
                 Route::post('/change-role/{user_id}/{role_id}', 'RolesPermissionsController@changeRole')->name('change-role')->middleware('permissionCheck:users_write');
                 Route::get('/ban-user/{user_id}', 'RolesPermissionsController@banUser')->name('ban-user')->middleware('permissionCheck:users_write');
                 Route::get('/unban-user/{user_id}', 'RolesPermissionsController@unBanUser')->name('unban-user')->middleware('permissionCheck:users_write');
+                Route::get('/free-subscription/{user_id}', 'RolesPermissionsController@freeSubscription')->name('add-to-free-subscription')->middleware('permissionCheck:users_write');
 
                 Route::get('/permissions', 'RolesPermissionsController@permissions')->name('permissions')->middleware('permissionCheck:permission_read');
                 Route::post('/change-role-permission-by-module', 'RolesPermissionsController@changeRolePermissionByModule')->name('change-role-permission-by-module')->middleware('permissionCheck:permission_write');

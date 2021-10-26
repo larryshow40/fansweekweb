@@ -11,6 +11,7 @@ use Validator;
 use Sentinel;
 use DB;
 use Activation;
+use App\FreeSubscription;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Modules\Setting\Entities\EmailTemplate;
@@ -209,5 +210,21 @@ class RolesPermissionsController extends Controller
         $permission->update($request->all());
 
         return redirect()->back()->with('success', __('permission_successfully_updated'));
+    }
+
+    public function freeSubscription($id){
+
+        if($subscription = FreeSubscription::where('user_id', $id)->first()){
+            $subscription->delete();
+            return redirect()->back()->with('success', "User subscription disabled");
+        }else{
+            $subscription = new FreeSubscription();
+            $subscription->user_id = $id;
+            $subscription->save();
+            return redirect()->back()->with('success', "User subscription enabled");
+
+        }
+        
+
     }
 }

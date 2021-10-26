@@ -2,6 +2,7 @@
 
 namespace Modules\User\Entities;
 
+use App\FreeSubscription;
 use Illuminate\Auth\Authenticatable;
 use Modules\User\Repositories\Permission;
 use Cartalyst\Sentinel\Users\EloquentUser;
@@ -66,6 +67,11 @@ class User extends EloquentUser implements JWTSubject
     public function posts()
     {
         return $this->hasMany('Modules\Post\Entities\Post');
+    }
+
+    public function freeSub()
+    {
+        return $this->hasOne(FreeSubscription::class);
     }
 
     /**

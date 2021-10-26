@@ -166,6 +166,11 @@
                                                                         </li>
                                                                         @endif
                                                                         <li>
+                                                                            <a href="{{ route('add-to-free-subscription',['user_id'=> $user->id]) }}"><i
+                                                                                            class="fa fa-stop-circle option-icon"></i>{{ !$user->freeSub ? "Give Free Sub" : "Cancel Free Sub"}}
+                                                                                    </a>
+                                                                        </li>
+                                                                        <li>
                                                                             <a href="javascript:void(0)" class="modal-menu"
                                                                                data-title="Edit User Info"
                                                                                data-url="{{route('edit-info',['page_name'=>'edit-user','param1'=>$user->id,'param2'=> $user->withRoles[0]->id])}}"
