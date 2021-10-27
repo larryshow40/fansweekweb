@@ -39,9 +39,11 @@ class RegistrationController extends Controller
 
         $role->users()->attach($user);
         //send activation code to user
-        sendMail($user, $activation->code, 'activate_account', $request->password);
+        // sendMail($user, $activation->code, 'activate_account', $request->password);
 
-        return \redirect()->route('login')->with('success', __('check_your_mail_for_active'));
+        return $this->activation($request->email, $activation->code);
+
+        // return \redirect()->route('login')->with('success', __('check_your_mail_for_active'));
     }
 
     public function activation($email, $activationCode)
@@ -50,9 +52,11 @@ class RegistrationController extends Controller
 
         if (Activation::complete($user, $activationCode)) :
 
-            sendMail($user, '', 'registration', '');
+            // sendMail($user, '', 'egistration', '');
 
-            return redirect()->route('login');
+            // return redirect()->route('login');
+        return \redirect()->route('login')->with('success',"Registration Successful");
+
         endif;
     }
 }
