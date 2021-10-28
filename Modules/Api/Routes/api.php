@@ -14,6 +14,19 @@ use Illuminate\Http\Request;
 |
 */
 
+
+    Route::group(['middleware' => ['jwt.verify', 'loginCheck', 'api.localization', 'CheckApiKey']], function () {
+
+        Route::post('code', 'ApiController@storeCode');
+        Route::post('like-code', 'ApiController@likeCode');
+        Route::post('dislike-code', 'ApiController@dislikeCode');
+        Route::post('store-comment', 'ApiController@storeComment');
+        Route::get('list-codes', 'ApiController@listCodes');
+        Route::post('paystack/webhook', 'ApiController@paystackWebhook');
+        Route::get('paystack/callback', 'ApiController@paystackCallback');
+        Route::get('check-subscription', 'ApiController@checkSubscription');
+    });
+
 Route::prefix('v10')->group(function () {
 
     Route::post('registers', 'UserController@register');
@@ -83,5 +96,7 @@ Route::prefix('v10')->group(function () {
 
         //search
         Route::get('/search', 'PostController@searchPost');
+
+
     });
 });
