@@ -365,3 +365,4 @@ class ApiController extends Controller
             public function testing(){
             dd(Subscription::all(), SubscriptionTransaction::all());
             }
+}
