@@ -26,5 +26,5 @@ Route::post('store-comment', 'ApiController@storeComment');
 Route::get('list-codes', 'ApiController@listCodes');
 Route::post('paystack/webhook', 'ApiController@paystackWebhook');
 Route::get('paystack/callback', 'ApiController@paystackCallback');
-Route::get('testing', 'ApiController@testing');
+Route::get('check-subscription', 'ApiController@checkSubscription');
 

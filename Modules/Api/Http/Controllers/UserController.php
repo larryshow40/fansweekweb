@@ -17,6 +17,7 @@ use Modules\User\Entities\User;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Activation;
+use App\Subscription;
 use Sentinel;
 use Illuminate\Support\Facades\Mail;
 use DB;
@@ -461,6 +462,7 @@ class UserController extends Controller
                 $data['phone'] = $user->phone;
                 $data['email'] = $user->email;
                 $data['dob'] = $user->dob;
+                $data['isSubscribed'] = Subscription::where('user_id', $user->id)->latest()->first()->status == 1 ? true : false;
 
                 return $this->responseWithSuccess(__('successfully_found'), $data, 200);
             else:
