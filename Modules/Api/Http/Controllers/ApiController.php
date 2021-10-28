@@ -55,7 +55,7 @@ class ApiController extends Controller
     } else {
     $like = new Like();
     $like->user_id = Sentinel::getUser()->id;
-    $like->company_code_id = $request->code_id ?? $_POST['code_id'];
+    $like->company_code_id = $request->code_id;
     $like->save();
     }
     }
