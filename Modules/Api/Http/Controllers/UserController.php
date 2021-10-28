@@ -463,7 +463,10 @@ class UserController extends Controller
                 $data['email'] = $user->email;
                 $data['dob'] = $user->dob;
                 if($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()){
-                    $data['isSubscribed'] = $hasSubscription->status == 1 ? true : false;
+                    $data['isSubscribed'] = $hasSubscription->status;
+                }else{
+                    $data['isSubscribed'] = false;
+
                 }
 
                 return $this->responseWithSuccess(__('successfully_found'), $data, 200);
