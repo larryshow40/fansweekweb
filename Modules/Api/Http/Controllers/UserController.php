@@ -469,7 +469,7 @@ class UserController extends Controller
                 return $this->responseWithError(__('user_not_found'), '', 404);
             endif;
         }catch (\Exception $e) {
-            return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
+            // return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
             return $this->responseWithError($e->getTrace(), [], 500);
         }
     }
