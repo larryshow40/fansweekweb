@@ -204,18 +204,13 @@ class HomeController extends Controller
                     ->count();
             });
         endif;
-
-
-
         $tracker                 = new VisitorTracker();
         $tracker->page_type      = \App\Enums\VisitorPageType::HomePage;
         $tracker->url            = \Request::url();
         $tracker->source_url     = \url()->previous();
         $tracker->ip             = \Request()->ip();
         $tracker->agent_browser  = UserAgentBrowser(\Request()->header('User-Agent'));
-
         $tracker->save();
-
         return view('site.pages.home', compact('codes', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
     }
 
