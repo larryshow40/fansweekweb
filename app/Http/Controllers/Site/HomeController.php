@@ -221,8 +221,11 @@ class HomeController extends Controller
 
     public function companyCodes()
     {
-        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
-        return view('site.pages.codes', compact('codes'));
+        $codes = CompanyCode::where('end_date', '<=', Carbon::today()->toDateTimeString())->latest()->paginate(10);
+        $groups = $codes->groupBy(function ($date) {
+            return Carbon::parse($date->updated_at)->format('d M, Y');
+        });
+        return view('site.pages.codes', compact('groups', 'codes'));
     }
     public function companyCodeShow($id)
     {
