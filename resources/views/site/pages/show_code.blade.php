@@ -21,7 +21,7 @@
                         class="badge badge-secondary dislikebutton {{ $code->dislikes->where('user_id', Sentinel::getUser()->id)->first() ? 'clicked' : '' }}"
                         id="dislike{{ $code->id }}"><i
                             class="fa fa-thumbs-down"></i>&nbsp;<span>{{ $code->dislikes->count() }}</span></a>
-                    <br /><span>By:</span> {{ $code->user->first_name }}
+                    <br /><span>{{$code->created_at->diffForHumans()}}</span> {{ $code->user->first_name }}
 
                 </div>
             </div>

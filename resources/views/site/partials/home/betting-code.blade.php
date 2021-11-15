@@ -34,7 +34,7 @@
             <div class="card-body py-2">
                 <div class="row">
                     <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
-                        class="col-4">{{ $code->name }}<br />By:</div>
+                        class="col-4">{{ $code->name }}<br />{{$code->created_at->format("d F")}}</div>
                     <div class="col-5">
                         <a style="text-decoration: none; color:lightblue;"
                             href="{{ route('code.show', $code->id) }}">{{ $code->code }}<br /><i
