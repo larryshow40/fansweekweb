@@ -141,7 +141,8 @@ class UserController extends Controller
             $activation = Activation::create($user);
 
             try {
-                sendMail($user, $activation->code, 'activate_account', $request->password);
+                // sendMail($user, $activation->code, 'activate_account', $request->password);
+                $this->activation($request->email, $activation->code)
             } catch (\Exception $e) {
                 return $this->responseWithError(__('test_mail_error_message'), [], 550);
             }
@@ -155,10 +156,21 @@ class UserController extends Controller
                 $user['gender'] = 'Female';
             endif;
 
-            return $this->responseWithSuccess(__('check_user_mail_for_active_this_account'), $user, 200);
+            return $this->responseWithSuccess("User creeated successfully", $user, 200);
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
+    }
+
+    public function activation($email, $activationCode)
+    {
+        $user       = User::whereEmail($email)->first();
+
+        if (Activation::complete($user, $activationCode)) :
+
+
+        endif;
+
     }
 
     public function getAuthenticatedUser()
@@ -456,12 +468,11 @@ class UserController extends Controller
                 $data['phone'] = $user->phone;
                 $data['email'] = $user->email;
                 $data['dob'] = $user->dob;
-                if(FreeSubscription::where("user_id",$user->id)->first()){
+                if (FreeSubscription::where("user_id", $user->id)->first()) {
                     $data['isSubscribed'] = true;
-                }
-                elseif ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
+                } elseif ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
                     $data['isSubscribed'] = $hasSubscription->status;
-                }else {
+                } else {
                     $data['isSubscribed'] = false;
                 }
 
