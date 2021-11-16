@@ -142,7 +142,7 @@ class UserController extends Controller
 
             try {
                 // sendMail($user, $activation->code, 'activate_account', $request->password);
-                $this->activation($request->email, $activation->code)
+                $this->activation($request->email, $activation->code);
             } catch (\Exception $e) {
                 return $this->responseWithError(__('test_mail_error_message'), [], 550);
             }
