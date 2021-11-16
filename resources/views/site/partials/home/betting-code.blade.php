@@ -33,7 +33,7 @@
         <div class="section-title my-2">
             <h6 class="text-success">{{$key}}</h6>
         </div>
-    @foreach ($codes as $code)
+    @foreach ($group as $code)
         <div class="card bg-dark mb-1" style="color:white;">
             <div class="card-body py-2">
                 <div class="row">
