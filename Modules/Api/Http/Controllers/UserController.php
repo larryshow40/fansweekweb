@@ -458,7 +458,7 @@ class UserController extends Controller
                 $data['dob'] = $user->dob;
                 if ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
                     $data['isSubscribed'] = $hasSubscription->status;
-                }else if(FreeSubscription::where("user_id",$user->id)->first()){
+                }elseif(FreeSubscription::where("user_id",$user->id)->first()){
                     $data['isSubscribed'] = true;
                 }else {
                     $data['isSubscribed'] = false;
