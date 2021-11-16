@@ -456,10 +456,11 @@ class UserController extends Controller
                 $data['phone'] = $user->phone;
                 $data['email'] = $user->email;
                 $data['dob'] = $user->dob;
-                if ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
-                    $data['isSubscribed'] = $hasSubscription->status;
-                }elseif(FreeSubscription::where("user_id",$user->id)->first()){
+                if(FreeSubscription::where("user_id",$user->id)->first()){
                     $data['isSubscribed'] = true;
+                }
+                elseif ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
+                    $data['isSubscribed'] = $hasSubscription->status;
                 }else {
                     $data['isSubscribed'] = false;
                 }
