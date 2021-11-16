@@ -29,12 +29,16 @@
             </div>
         </div>
     </div>
+    @foreach ($codeGroups as $key => $group)
+        <div class="section-title my-2">
+            <h6 class="text-success">{{$key}}</h6>
+        </div>
     @foreach ($codes as $code)
         <div class="card bg-dark mb-1" style="color:white;">
             <div class="card-body py-2">
                 <div class="row">
                     <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
-                        class="col-4">{{ $code->name }}<br />{{$code->created_at->format("d F")}}</div>
+                        class="col-4">{{ $code->name }}<br /></div>
                     <div class="col-5">
                         <a style="text-decoration: none; color:lightblue;"
                             href="{{ route('code.show', $code->id) }}">{{ $code->code }}<br /><i
@@ -69,6 +73,7 @@
 
             </div>
         </div>
+    @endforeach
     @endforeach
     <a href="{{ route('all-codes') }}" class="btn btn-secondary btn-block">View All</a>
 </div>

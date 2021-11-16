@@ -34,6 +34,10 @@ class HomeController extends Controller
 
         $codes = CompanyCode::latest()->where('end_date', '<=', Carbon::now()->toDateTimeString())->take(5)->get();
 
+        $codeGroups = $codes->groupBy(function ($date) {
+            return Carbon::parse($date->updated_at)->format('d M, Y');
+        });
+
         // return $data;
 
         $groups =  $data->groupBy('competition_cluster')->take(15);
@@ -211,7 +215,7 @@ class HomeController extends Controller
         $tracker->ip             = \Request()->ip();
         $tracker->agent_browser  = UserAgentBrowser(\Request()->header('User-Agent'));
         $tracker->save();
-        return view('site.pages.home', compact('codes', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
+        return view('site.pages.home', compact('codes', 'codeGroups', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
     }
 
     public function companyCodes()
