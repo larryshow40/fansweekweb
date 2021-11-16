@@ -17,6 +17,7 @@ use Modules\User\Entities\User;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Activation;
+use App\FreeSubscription;
 use App\Subscription;
 use Sentinel;
 use Illuminate\Support\Facades\Mail;
@@ -38,7 +39,7 @@ class UserController extends Controller
 
     public function authenticate(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|max:255',
                 'password' => 'required|min:5|max:30',
@@ -52,9 +53,9 @@ class UserController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (blank($user)) {
-                return $this->responseWithError( __('your_email_is_invalid'), [], 422);
-            } elseif($user->is_user_banned == 0) {
-                return $this->responseWithError( __('your_account_is_banned'), [], 401);
+                return $this->responseWithError(__('your_email_is_invalid'), [], 422);
+            } elseif ($user->is_user_banned == 0) {
+                return $this->responseWithError(__('your_account_is_banned'), [], 401);
             }
 
             $credentials = $request->only('email', 'password');
@@ -64,14 +65,11 @@ class UserController extends Controller
                     return $this->responseWithError(__('invalid_credentials'), [], 401);
                 }
             } catch (JWTException $e) {
-                return $this->responseWithError(__('could_not_create_token'), [] , 422);
-
+                return $this->responseWithError(__('could_not_create_token'), [], 422);
             } catch (ThrottlingException $e) {
-                return $this->responseWithError(__('suspicious_activity_on_your_ip'). $e->getDelay() .' '.  __('seconds'), [], 500);
-
+                return $this->responseWithError(__('suspicious_activity_on_your_ip') . $e->getDelay() . ' ' .  __('seconds'), [], 500);
             } catch (NotActivatedException $e) {
-                return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'),[],400);
-
+                return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 400);
             } catch (Exception $e) {
                 return $this->responseWithError(__('something_went_wrong'), [], 500);
             }
@@ -86,21 +84,21 @@ class UserController extends Controller
             $data['first_name'] = $user->first_name;
             $data['last_name'] = $user->last_name;
 
-            if (isset($user->profile_image)):
+            if (isset($user->profile_image)) :
                 $data['image'] = static_asset($user->profile_image);
-            else:
+            else :
                 $data['image'] = '';
             endif;
             $data['password_available'] = True;
             $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
             $data['last_login'] = $user->last_login;
-            $data['about'] = $user->about_us ?? ' ' ;
+            $data['about'] = $user->about_us ?? ' ';
             $data['socials'] = $user->social_media;
             $data['gender'] = 'Other';
 
-            if($user->gender == 1):
+            if ($user->gender == 1) :
                 $data['gender'] = 'Male';
-            elseif ($user->gender == 2):
+            elseif ($user->gender == 2) :
                 $data['gender'] = 'Female';
             endif;
 
@@ -116,7 +114,7 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        try{
+        try {
             // return $request;
             // return Config::get('app.locale');
             $validator = Validator::make($request->all(), [
@@ -128,7 +126,7 @@ class UserController extends Controller
                 'password_confirmation' => 'required|min:6|max:30'
             ]);
 
-            $request['phone'] = $request->phone ?? '00'.rand('100000000','999999999');
+            $request['phone'] = $request->phone ?? '00' . rand('100000000', '999999999');
 
             if ($validator->fails()) {
                 // return $validator->getMessageBag()->all();
@@ -142,19 +140,18 @@ class UserController extends Controller
             $role->users()->attach($user);
             $activation = Activation::create($user);
 
-            try{
+            try {
                 sendMail($user, $activation->code, 'activate_account', $request->password);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 return $this->responseWithError(__('test_mail_error_message'), [], 550);
             }
 
 
             $user['gender'] = 'Other';
 
-            if($request->gender == 1):
+            if ($request->gender == 1) :
                 $user['gender'] = 'Male';
-            elseif ($request->gender == 2):
+            elseif ($request->gender == 2) :
                 $user['gender'] = 'Female';
             endif;
 
@@ -162,16 +159,14 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
     public function getAuthenticatedUser()
     {
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return $this->responseWithError('user_not_found', '' , 404);
+                return $this->responseWithError('user_not_found', '', 404);
             }
-
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json(['token_expired'], $e->getStatusCode());
         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
@@ -185,21 +180,21 @@ class UserController extends Controller
         $data['first_name'] = $user->first_name;
         $data['last_name'] = $user->last_name;
 
-        if (isset($user->profile_image)):
+        if (isset($user->profile_image)) :
             $data['image'] = static_asset($user->profile_image);
-        else:
+        else :
             $data['image'] = '';
         endif;
-        $data['password_available'] = $user->is_password_set ? True: False;
+        $data['password_available'] = $user->is_password_set ? True : False;
         $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
         $data['last_login'] = $user->last_login;
         $data['about'] = $user->about_us ?? ' ';
         $data['socials'] = $user->social_media;
         $data['gender'] = 'Other';
 
-        if($user->gender == 1):
+        if ($user->gender == 1) :
             $data['gender'] = 'Male';
-        elseif ($user->gender == 2):
+        elseif ($user->gender == 2) :
             $data['gender'] = 'Female';
         endif;
         $data['phone'] = $user->phone;
@@ -214,7 +209,7 @@ class UserController extends Controller
         try {
             Sentinel::logout();
             JWTAuth::invalidate(JWTAuth::getToken());
-            return $this->responseWithSuccess(__('successfully_logout'),[] ,200);
+            return $this->responseWithSuccess(__('successfully_logout'), [], 200);
         } catch (JWTException $e) {
             JWTAuth::unsetToken();
             // something went wrong tries to validate a invalid token
@@ -224,32 +219,32 @@ class UserController extends Controller
 
     public function updateUserInfo(Request $request)
     {
-        try{
+        try {
             $validator = Validator::make($request->all(), [
                 'id'            => 'required',
                 'first_name'    => 'required',
                 'last_name'     => 'required|min:2|max:30',
                 'image'         => 'mimes:jpg,JPG,JPEG,jpeg,png|max:5120',
-                'email'         => 'required|unique:users,email,'.\Request()->id,
+                'email'         => 'required|unique:users,email,' . \Request()->id,
             ]);
 
             if ($validator->fails()) {
                 return $this->responseWithError(__('required_field_missing'), $validator->errors(), 422);
             }
             if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return $this->responseWithError(__('unauthorized_user'), '' , 404);
+                return $this->responseWithError(__('unauthorized_user'), '', 404);
             }
 
             $image = $request->file('image');
-            if(isset($image)):
-//            make unique name for image
+            if (isset($image)) :
+                //            make unique name for image
                 $currentDate = Carbon::now()->toDateString();
-                $imageName  = $request->first_name.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+                $imageName  = $request->first_name . '-' . $currentDate . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
 
                 if (strpos(php_sapi_name(), 'cli') !== false  || defined('LARAVEL_START_FROM_PUBLIC')) :
 
                     $directory              = 'images/';
-                else:
+                else :
                     $directory              = 'public/images/';
                 endif;
 
@@ -257,16 +252,16 @@ class UserController extends Controller
 
                 if (strpos(php_sapi_name(), 'cli') !== false || defined('LARAVEL_START_FROM_PUBLIC')) {
                     $path = '';
-                }else{
+                } else {
                     $path = 'public/';
                 }
 
-                if (File::exists($path.$user->profile_image) && !blank($user->profile_image)) :
-                    unlink($path.$user->profile_image);
+                if (File::exists($path . $user->profile_image) && !blank($user->profile_image)) :
+                    unlink($path . $user->profile_image);
                 endif;
                 Image::make($image)->fit(260, 200)->save($profileImgUrl);
 
-                $user->profile_image    = str_replace("public/","",$profileImgUrl);
+                $user->profile_image    = str_replace("public/", "", $profileImgUrl);
 
                 $user->save();
 
@@ -278,7 +273,7 @@ class UserController extends Controller
             $user->email        = $request->email;
             $user->gender       = $request->gender ?? 0;
             $user->dob          = date('Y-m-d', strtotime($request->dob));
-            $user->phone        = $request->phone ?? '00'.rand('100000000,999999999');
+            $user->phone        = $request->phone ?? '00' . rand('100000000,999999999');
 
             $user->save();
 
@@ -288,21 +283,21 @@ class UserController extends Controller
             $data['first_name'] = $user->first_name;
             $data['last_name'] = $user->last_name;
 
-            if (isset($user->profile_image)):
+            if (isset($user->profile_image)) :
                 $data['image'] = static_asset($user->profile_image);
-            else:
+            else :
                 $data['image'] = '';
             endif;
-            $data['password_available'] = $user->is_password_set ? True: False;
+            $data['password_available'] = $user->is_password_set ? True : False;
             $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
             $data['last_login'] = $user->last_login;
             $data['about'] = $user->about_us ?? ' ';
             $data['socials'] = $user->social_media;
             $data['gender'] = 'Other';
 
-            if($user->gender == 1):
+            if ($user->gender == 1) :
                 $data['gender'] = 'Male';
-            elseif ($user->gender == 2):
+            elseif ($user->gender == 2) :
                 $data['gender'] = 'Female';
             endif;
             $data['phone'] = $user->phone;
@@ -313,7 +308,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
     public function changePassword(Request $request)
@@ -333,7 +327,7 @@ class UserController extends Controller
 
             $oldPassword    = $request->old_password;
             $password       = $request->password;
-            $is_password_set= 1;
+            $is_password_set = 1;
 
             $user           = Sentinel::getUser();
 
@@ -341,28 +335,28 @@ class UserController extends Controller
                 return $this->responseWithError(__('please_check_again'), '', 422);
             }
 
-            Sentinel::update($user, array('password' => $password, 'is_password_set' =>$is_password_set));
+            Sentinel::update($user, array('password' => $password, 'is_password_set' => $is_password_set));
 
             $data['id'] = $user->id;
 
             $data['first_name'] = $user->first_name;
             $data['last_name'] = $user->last_name;
 
-            if (isset($user->profile_image)):
+            if (isset($user->profile_image)) :
                 $data['image'] = static_asset($user->profile_image);
-            else:
+            else :
                 $data['image'] = '';
             endif;
-            $data['password_available'] = $user->is_password_set ? True: False;
+            $data['password_available'] = $user->is_password_set ? True : False;
             $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
             $data['last_login'] = $user->last_login;
             $data['about'] = $user->about_us ?? ' ';
             $data['socials'] = $user->social_media;
             $data['gender'] = 'Other';
 
-            if($user->gender == 1):
+            if ($user->gender == 1) :
                 $data['gender'] = 'Male';
-            elseif ($user->gender == 2):
+            elseif ($user->gender == 2) :
                 $data['gender'] = 'Female';
             endif;
             $data['phone'] = $user->phone;
@@ -375,8 +369,9 @@ class UserController extends Controller
         }
     }
 
-    public function setPassword(Request $request){
-        try{
+    public function setPassword(Request $request)
+    {
+        try {
             $validator = Validator::make($request->all(), [
                 'id'                => 'required',
                 'firebase_auth_id' => 'required|min:4',
@@ -389,10 +384,10 @@ class UserController extends Controller
 
             $is_valid_user = User::where('firebase_auth_id', $request->firebase_auth_id)->first();
 
-            if ($is_valid_user):
-                if($is_valid_user->is_password_set):
-                    return $this->responseWithError(__('you_are_not_allowed_to_set_this_password'), __('invalid_attempt'),401);
-                else:
+            if ($is_valid_user) :
+                if ($is_valid_user->is_password_set) :
+                    return $this->responseWithError(__('you_are_not_allowed_to_set_this_password'), __('invalid_attempt'), 401);
+                else :
                     $password       = $request->password;
 
                     Sentinel::update($is_valid_user, array('password' => $password));
@@ -403,16 +398,16 @@ class UserController extends Controller
 
                     return $this->responseWithSuccess(__('successfully_updated'), '', 200);
                 endif;
-            else:
-                return $this->responseWithError(__('user_not_found'), '' , 404);
+            else :
+                return $this->responseWithError(__('user_not_found'), '', 404);
             endif;
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
-    public function userDetailsById(Request $request){
+    public function userDetailsById(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
@@ -424,9 +419,8 @@ class UserController extends Controller
 
             try {
                 if (!$user = JWTAuth::parseToken()->authenticate()) {
-                    return $this->responseWithError('user_not_found', '' , 404);
+                    return $this->responseWithError('user_not_found', '', 404);
                 }
-
             } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
                 return response()->json(['token_expired'], $e->getStatusCode());
             } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
@@ -435,50 +429,52 @@ class UserController extends Controller
                 return response()->json(['token_absent'], $e->getStatusCode());
             }
 
-            if ($user = User::find($request->id)):
+            if ($user = User::find($request->id)) :
 
                 $data['id'] = $user->id;
 
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
                 $data['email'] = $user->email;
                 $data['dob'] = $user->dob;
-                if($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()){
+                if ($hasSubscription = Subscription::where('user_id', $user->id)->latest()->first()) {
                     $data['isSubscribed'] = $hasSubscription->status;
-                }else{
+                }else if(FreeSubscription::where("user_id", Sentinel::getUser()->id)->first()){
+                    $data['isSubscribed'] = true;
+                }else {
                     $data['isSubscribed'] = false;
-
                 }
 
                 return $this->responseWithSuccess(__('successfully_found'), $data, 200);
-            else:
+            else :
                 return $this->responseWithError(__('user_not_found'), '', 404);
             endif;
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             // return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
             return $this->responseWithError($e->getTrace(), [], 500);
         }
     }
-    public function userDetailsByEmail(Request $request){
+    public function userDetailsByEmail(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
@@ -490,9 +486,8 @@ class UserController extends Controller
 
             try {
                 if (!$user = JWTAuth::parseToken()->authenticate()) {
-                    return $this->responseWithError(__('user_not_found'), '' , 404);
+                    return $this->responseWithError(__('user_not_found'), '', 404);
                 }
-
             } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
                 return response()->json(['token_expired'], $e->getStatusCode());
             } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
@@ -501,28 +496,28 @@ class UserController extends Controller
                 return response()->json(['token_absent'], $e->getStatusCode());
             }
 
-            if ($user = User::where('email', $request->email)->first()):
+            if ($user = User::where('email', $request->email)->first()) :
 
                 $data['id'] = $user->id;
 
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
@@ -530,16 +525,16 @@ class UserController extends Controller
                 $data['dob'] = $user->dob;
 
                 return $this->responseWithSuccess(__('successfully_found'), $data, 200);
-            else:
+            else :
                 return $this->responseWithError(__('user_not_found'), '', 404);
             endif;
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
-    public function deactivateAccount(Request $request){
+    public function deactivateAccount(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
@@ -555,9 +550,9 @@ class UserController extends Controller
 
             $user['gender'] = 'Other';
 
-            if($user->gender == 1):
+            if ($user->gender == 1) :
                 $user['gender'] = 'Male';
-            elseif ($user->gender == 2):
+            elseif ($user->gender == 2) :
                 $user['gender'] = 'Female';
             endif;
 
@@ -567,7 +562,7 @@ class UserController extends Controller
                 return $this->responseWithError(__('password_wrong'), $user, 422);
             }
 
-            $activation = \Modules\User\Entities\Activation::where('user_id',$user->id)->first();
+            $activation = \Modules\User\Entities\Activation::where('user_id', $user->id)->first();
 
             $activation->completed = 0;
 
@@ -577,24 +572,24 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
-    public function firebaseAuth(Request $request){
-        try{
+    public function firebaseAuth(Request $request)
+    {
+        try {
             $validator = Validator::make($request->all(), [
                 'uid'   => 'required',
             ]);
 
             if ($validator->fails()) {
-                return $this->responseWithError(__('required_field_missing'), $validator->errors(),422);
+                return $this->responseWithError(__('required_field_missing'), $validator->errors(), 422);
             }
 
-            if($user = User::where('firebase_auth_id', $request->uid)->first()):
-                if($user->is_user_banned == 0) :
-                    return $this->responseWithError( __('your_account_is_banned'), [], 401);
-                elseif($user->withActivation->completed == 0) :
-                    return $this->responseWithError( __('you_account_not_activated_check_mail_or_contact_support'), [], 401);
+            if ($user = User::where('firebase_auth_id', $request->uid)->first()) :
+                if ($user->is_user_banned == 0) :
+                    return $this->responseWithError(__('your_account_is_banned'), [], 401);
+                elseif ($user->withActivation->completed == 0) :
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 401);
                 endif;
 
                 try {
@@ -602,19 +597,16 @@ class UserController extends Controller
                         return $this->responseWithError(__('invalid_credentials'), [], 401);
                     }
                 } catch (JWTException $e) {
-                    return $this->responseWithError(__('could_not_create_token'), [] , 422);
-
+                    return $this->responseWithError(__('could_not_create_token'), [], 422);
                 } catch (ThrottlingException $e) {
-                    return $this->responseWithError(__('suspicious_activity_on_your_ip'). $e->getDelay() .' '.  __('seconds'), [], 500);
-
+                    return $this->responseWithError(__('suspicious_activity_on_your_ip') . $e->getDelay() . ' ' .  __('seconds'), [], 500);
                 } catch (NotActivatedException $e) {
-                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'),[],400);
-
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 400);
                 } catch (Exception $e) {
                     return $this->responseWithError(__('something_went_wrong'), [], 500);
                 }
 
-//                $request['password'] = 'social-login';
+                //                $request['password'] = 'social-login';
 
                 Sentinel::authenticate($request->all());
 
@@ -624,21 +616,21 @@ class UserController extends Controller
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
@@ -647,11 +639,11 @@ class UserController extends Controller
 
                 return $this->responseWithSuccess(__('successfully_login'), $data, 200);
 
-            elseif($user = User::where('email', $request->email)->first()):
-                if($user->is_user_banned == 0) :
-                    return $this->responseWithError( __('your_account_is_banned'), [], 401);
-                elseif($user->withActivation->completed == 0) :
-                    return $this->responseWithError( __('you_account_not_activated_check_mail_or_contact_support'), [], 401);
+            elseif ($user = User::where('email', $request->email)->first()) :
+                if ($user->is_user_banned == 0) :
+                    return $this->responseWithError(__('your_account_is_banned'), [], 401);
+                elseif ($user->withActivation->completed == 0) :
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 401);
                 endif;
 
                 try {
@@ -659,19 +651,16 @@ class UserController extends Controller
                         return $this->responseWithError(__('invalid_credentials'), [], 401);
                     }
                 } catch (JWTException $e) {
-                    return $this->responseWithError(__('could_not_create_token'), [] , 422);
-
+                    return $this->responseWithError(__('could_not_create_token'), [], 422);
                 } catch (ThrottlingException $e) {
-                    return $this->responseWithError(__('suspicious_activity_on_your_ip'). $e->getDelay() .' '.  __('seconds'), [], 500);
-
+                    return $this->responseWithError(__('suspicious_activity_on_your_ip') . $e->getDelay() . ' ' .  __('seconds'), [], 500);
                 } catch (NotActivatedException $e) {
-                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'),[],400);
-
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 400);
                 } catch (Exception $e) {
                     return $this->responseWithError(__('something_went_wrong'), [], 500);
                 }
 
-//                $request['password'] = 'social-login';
+                //                $request['password'] = 'social-login';
 
                 Sentinel::authenticate($request->all());
 
@@ -680,21 +669,21 @@ class UserController extends Controller
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
@@ -703,11 +692,11 @@ class UserController extends Controller
 
                 return $this->responseWithSuccess(__('successfully_login'), $data, 200);
 
-            elseif($user = User::where('phone', $request->phone)->first()):
-                if($user->is_user_banned == 0) :
-                    return $this->responseWithError( __('your_account_is_banned'), [], 401);
-                elseif($user->withActivation->completed == 0) :
-                    return $this->responseWithError( __('you_account_not_activated_check_mail_or_contact_support'), [], 401);
+            elseif ($user = User::where('phone', $request->phone)->first()) :
+                if ($user->is_user_banned == 0) :
+                    return $this->responseWithError(__('your_account_is_banned'), [], 401);
+                elseif ($user->withActivation->completed == 0) :
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 401);
                 endif;
 
                 try {
@@ -715,19 +704,16 @@ class UserController extends Controller
                         return $this->responseWithError(__('invalid_credentials'), [], 401);
                     }
                 } catch (JWTException $e) {
-                    return $this->responseWithError(__('could_not_create_token'), [] , 422);
-
+                    return $this->responseWithError(__('could_not_create_token'), [], 422);
                 } catch (ThrottlingException $e) {
-                    return $this->responseWithError(__('suspicious_activity_on_your_ip'). $e->getDelay() .' '.  __('seconds'), [], 500);
-
+                    return $this->responseWithError(__('suspicious_activity_on_your_ip') . $e->getDelay() . ' ' .  __('seconds'), [], 500);
                 } catch (NotActivatedException $e) {
-                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'),[],400);
-
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 400);
                 } catch (Exception $e) {
                     return $this->responseWithError(__('something_went_wrong'), [], 500);
                 }
 
-//                $request['password'] = 'social-login';
+                //                $request['password'] = 'social-login';
 
                 Sentinel::authenticate($request->all());
 
@@ -736,21 +722,21 @@ class UserController extends Controller
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
@@ -758,15 +744,15 @@ class UserController extends Controller
                 $data['dob'] = $user->dob;
 
                 return $this->responseWithSuccess(__('successfully_login'), $data, 200);
-            else:
+            else :
                 $request['user_role'] = 'user';
                 $request['password'] = 'social-login';
 
-                if(!isset($request['email'])):
-                    $request['email'] = uniqid().'@mail.com';
+                if (!isset($request['email'])) :
+                    $request['email'] = uniqid() . '@mail.com';
                 endif;
 
-                if(!isset($request['phone'])):
+                if (!isset($request['phone'])) :
                     $request['phone'] = '00000000000';
                 endif;
 
@@ -786,40 +772,37 @@ class UserController extends Controller
                         return $this->responseWithError(__('invalid_credentials'), [], 401);
                     }
                 } catch (JWTException $e) {
-                    return $this->responseWithError(__('could_not_create_token'), [] , 422);
-
+                    return $this->responseWithError(__('could_not_create_token'), [], 422);
                 } catch (ThrottlingException $e) {
-                    return $this->responseWithError(__('suspicious_activity_on_your_ip'). $e->getDelay() .' '.  __('seconds'), [], 500);
-
+                    return $this->responseWithError(__('suspicious_activity_on_your_ip') . $e->getDelay() . ' ' .  __('seconds'), [], 500);
                 } catch (NotActivatedException $e) {
-                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'),[],400);
-
+                    return $this->responseWithError(__('you_account_not_activated_check_mail_or_contact_support'), [], 400);
                 } catch (Exception $e) {
                     return $this->responseWithError(__('something_went_wrong'), [], 500);
                 }
 
-//                $request['password'] = 'social-login';
+                //                $request['password'] = 'social-login';
 
                 Sentinel::authenticate($request->all());
 
                 $data['first_name'] = $user->first_name;
                 $data['last_name'] = $user->last_name;
 
-                if (isset($user->profile_image)):
+                if (isset($user->profile_image)) :
                     $data['image'] = static_asset($user->profile_image);
-                else:
+                else :
                     $data['image'] = '';
                 endif;
-                $data['password_available'] = $user->is_password_set ? True: false;
+                $data['password_available'] = $user->is_password_set ? True : false;
                 $data['join_date'] = Carbon::createFromFormat('Y-m-d H:i:s', $user['created_at'])->format('Y-m-d');
                 $data['last_login'] = $user->last_login;
                 $data['about'] = $user->about_us ?? ' ';
                 $data['socials'] = $user->social_media;
                 $data['gender'] = 'Other';
 
-                if($user->gender == 1):
+                if ($user->gender == 1) :
                     $data['gender'] = 'Male';
-                elseif ($user->gender == 2):
+                elseif ($user->gender == 2) :
                     $data['gender'] = 'Female';
                 endif;
                 $data['phone'] = $user->phone;
@@ -833,23 +816,22 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return $this->responseWithError(__('something_went_wrong_please_try_again'), [], 500);
         }
-
     }
 
     public function forgotPassword(Request $request)
     {
-        try{
+        try {
 
             $validator = Validator::make($request->all(), [
                 'email'   => 'required',
             ]);
 
             if ($validator->fails()) {
-                return $this->responseWithError(__('required_field_missing'), $validator->errors(),422);
+                return $this->responseWithError(__('required_field_missing'), $validator->errors(), 422);
             }
             $user       = User::whereEmail($request->email)->first();
 
-            if (blank($user)):
+            if (blank($user)) :
                 return $this->responseWithError(__('user_not_found'), [], 500);
             endif;
 
@@ -862,7 +844,6 @@ class UserController extends Controller
             sendMail($user, $remainder->code, 'forgot_password', '');
 
             return $this->responseWithSuccess(__('reset_code_is_send_to_mail'), [], 200);
-
         } catch (\Exception $e) {
             return $this->responseWithError(__('test_mail_error_message'), [], 500);
         }
@@ -873,5 +854,4 @@ class UserController extends Controller
     {
         return Config::get('app.locale');
     }
-
 }
