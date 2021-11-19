@@ -28,7 +28,7 @@ class ApiController extends Controller
 
     public function storeCode(Request $request)
     {
-        if (CompanyCode::where('code', $request->code)->Where('name', $request->bet_name)->exists()) {
+        if (CompanyCode::where('code', $request->bet_code)->Where('name', $request->bet_name)->exists()) {
             throw new Exception('error', 'Oops! Code exists already');;
         } else {
             $code = new CompanyCode;
