@@ -28,7 +28,7 @@ class ApiController extends Controller
 
     public function storeCode(Request $request)
     {
-        try{
+        try {
             if (CompanyCode::where('code', $request->bet_code)->where('name', $request->bet_company)->exists()) {
                 throw new Exception('Oops! Code exists already');;
             } else {
@@ -44,10 +44,9 @@ class ApiController extends Controller
                     "data" => $code
                 ]);
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-        
     }
 
 
@@ -117,7 +116,7 @@ class ApiController extends Controller
 
     public function listCodes()
     {
-        // $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
+        // $codes = CompanyCode::where('end_date', '>=', Carbon::now()->toDateTimeString())->paginate(10);
         $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '>=', Carbon::now()->toDateTimeString())->get();
         return CompanyCodeResource::collection($codes);
         // return response()->json([

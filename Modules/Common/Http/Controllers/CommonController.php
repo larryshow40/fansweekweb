@@ -73,7 +73,7 @@ class CommonController extends Controller
 
     public function companyCode()
     {
-        $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
+        $codes = CompanyCode::where('end_date', '>=', Carbon::now()->toDateTimeString())->get();
         return view('common::codes', compact('codes'));
     }
 
@@ -83,8 +83,9 @@ class CommonController extends Controller
         return view('common::subscriptions', compact('subscriptions'));
     }
 
-    public function cancelSubscription($id){
-        try{
+    public function cancelSubscription($id)
+    {
+        try {
             DB::beginTransaction();
             $subscription = Subscription::find($id);
 
@@ -96,7 +97,7 @@ class CommonController extends Controller
             }
             DB::commit();
             return redirect()->back()->with('success', 'Cancelled Successfully');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
