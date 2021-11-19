@@ -22,6 +22,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use App\Action\Subscription\VerifyTransaction;
 use Dotenv\Regex\Success;
+use Exception;
 
 class ApiController extends Controller
 {
