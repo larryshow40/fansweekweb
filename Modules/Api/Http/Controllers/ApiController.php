@@ -117,7 +117,7 @@ class ApiController extends Controller
     public function listCodes()
     {
         // $codes = CompanyCode::where('end_date', '>=', Carbon::now()->toDateTimeString())->paginate(10);
-        $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '>=', Carbon::now()->toDateTimeString())->get();
+        $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '>=', Carbon::now()->toDateTimeString())->latest()->get();
         return CompanyCodeResource::collection($codes);
         // return response()->json([
         // "status" => true,
