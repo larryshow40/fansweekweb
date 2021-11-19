@@ -115,7 +115,7 @@ class ApiController extends Controller
     public function listCodes()
     {
         // $codes = CompanyCode::where('end_date', '<=', Carbon::now()->toDateTimeString())->paginate(10);
-        $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '<=', Carbon::now()->toDateTimeString())->get();
+        $codes = CompanyCode::with('user')->withCount(['likes', 'dislikes'])->where('end_date', '>=', Carbon::now()->toDateTimeString())->get();
         return CompanyCodeResource::collection($codes);
         // return response()->json([
         //     "status" => true,
@@ -231,76 +231,76 @@ class ApiController extends Controller
     public function paystackWebhook(Request $request)
     {
         $ip = $request->ip();
-            $paymentDetails = $request->all();
-            switch ($paymentDetails['event']) {
-                case 'charge.success':
+        $paymentDetails = $request->all();
+        switch ($paymentDetails['event']) {
+            case 'charge.success':
                 try {
-                        $data = $paymentDetails['data'];
+                    $data = $paymentDetails['data'];
 
-                        DB::beginTransaction();
+                    DB::beginTransaction();
 
-                        $transaction = new SubscriptionTransaction();
-                        $transaction->reference = $data['reference'];
-                        $transaction->user_id = User::firstWhere('email', $data['customer']['email'])->id;
-                        $transaction->amount = $data['amount'] / 100;
-                        $transaction->paid_at = $data['paid_at'];
-                        $transaction->email = $data['customer']['email'];
-                        $transaction->status = $data['status'];
-                        
-                        $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
+                    $transaction = new SubscriptionTransaction();
+                    $transaction->reference = $data['reference'];
+                    $transaction->user_id = User::firstWhere('email', $data['customer']['email'])->id;
+                    $transaction->amount = $data['amount'] / 100;
+                    $transaction->paid_at = $data['paid_at'];
+                    $transaction->email = $data['customer']['email'];
+                    $transaction->status = $data['status'];
 
-                        if($lastSubscription){
-                                $lastSubscription->next_payment_date = Carbon::parse($lastSubscription->next_payment_date)->addMonth();
-                                $lastSubscription->update();
-                        }else{
-                            CreateSubscription::create($data['customer']['email']);
-                        }
-                        $transaction->save();
-                        DB::commit();
-                        return response()->json([
-                            'message' => 'Subscription Transaction Successful',
-                        ], 200);
-                    } catch (\Exception $e) {
-                        return response()->json([
-                            'message' => $e->getMessage(),
-                        ], 500);
+                    $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
+
+                    if ($lastSubscription) {
+                        $lastSubscription->next_payment_date = Carbon::parse($lastSubscription->next_payment_date)->addMonth();
+                        $lastSubscription->update();
+                    } else {
+                        CreateSubscription::create($data['customer']['email']);
                     }
-                case 'invoice.payment_failed':
-                    try {
-                        $data = $paymentDetails['data'];
+                    $transaction->save();
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'Subscription Transaction Successful',
+                    ], 200);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => $e->getMessage(),
+                    ], 500);
+                }
+            case 'invoice.payment_failed':
+                try {
+                    $data = $paymentDetails['data'];
 
-                        DB::beginTransaction();
-                            $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
-                            if ($lastSubscription) {
-                                $lastSubscription->subscription_status = 'cancelled';
-                                $lastSubscription->status = 0;
-                                $lastSubscription->update();
-                                CancelSubscription::cancel($lastSubscription->subscription_code, $lastSubscription->email_token);
-                            }
-                        DB::commit();
-                        return response()->json([
-                            'message' => 'Subscription Transaction Failed',
-                        ], 200);
-                    } catch (\Exception $e) {
-                        return response()->json([
-                            'message' => $e->getMessage(),
-                        ], 500);
+                    DB::beginTransaction();
+                    $lastSubscription = Subscription::where('customer_email', $data['customer']['email'])->latest()->where('status', 1)->where('subscription_status', 'active')->first();
+                    if ($lastSubscription) {
+                        $lastSubscription->subscription_status = 'cancelled';
+                        $lastSubscription->status = 0;
+                        $lastSubscription->update();
+                        CancelSubscription::cancel($lastSubscription->subscription_code, $lastSubscription->email_token);
                     }
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'Subscription Transaction Failed',
+                    ], 200);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => $e->getMessage(),
+                    ], 500);
+                }
 
-                    break;
-                default:
-            }
-
+                break;
+            default:
+        }
     }
 
-    public function testwebhook(){
-        $client = new Client(); 
+    public function testwebhook()
+    {
+        $client = new Client();
         $response = $client->post(
             'https://fansweek.com/api/paystack/webhook',
             [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'Authorization' =>'Bearer '.config('paystack.secretKey'),
+                    'Authorization' => 'Bearer ' . config('paystack.secretKey'),
                 ],
 
                 'json' => [
@@ -346,7 +346,7 @@ class ApiController extends Controller
                             "risk_action" => "default"
                         ],
                         "created_at" => "2016-10-01T10:59:59.000Z"
-                    ] 
+                    ]
                 ]
 
             ]
@@ -362,11 +362,11 @@ class ApiController extends Controller
             return redirect()->route('home')->with('success', 'Subscription Successful');
         } else {
             return redirect()->route('home')->with('error', 'Something went wrong, Please try again!');
-        }    
+        }
     }
 
-    public function testing(){
+    public function testing()
+    {
         dd(Subscription::all(), SubscriptionTransaction::all());
     }
-
 }
