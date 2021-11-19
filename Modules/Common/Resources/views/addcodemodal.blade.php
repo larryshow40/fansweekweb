@@ -24,7 +24,7 @@
 
               <div class="form-group">
                 <label style="color: black !important;" for="">End Date</label>
-                <input style="background: white !important; color:black!important;" type="date" class="form-control" name="date" id="">
+                <input style="background: white !important; color:black!important;" type="date" class="form-control" name="end_date" id="">
               </div>
 
               <input type="submit" class="btn btn-primary">

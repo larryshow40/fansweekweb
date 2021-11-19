@@ -110,7 +110,7 @@ class CommonController extends Controller
             $code->user_id = Sentinel::getUser()->id;
             $code->name = $request->name;
             $code->code = $request->code;
-            $code->end_date = Carbon::parse($request->start_date)->format('Y-m-d H:i');;
+            $code->end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i');
             $code->save();
             return redirect()->back()->with('success', 'Added Successfully');
         }

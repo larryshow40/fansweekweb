@@ -35,8 +35,9 @@ class ApiController extends Controller
         } else {
             $code = new CompanyCode;
             $code->user_id = Sentinel::getUser()->id;
-            $code->name = $request->name;
-            $code->code = $request->code;
+            $code->name = $request->bet_company;
+            $code->code = $request->bet_code;
+            $code->end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i');
             $code->save();
             return response()->json([
                 "status" => true,

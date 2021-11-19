@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 
     Route::group(['middleware' => ['jwt.verify', 'loginCheck', 'api.localization', 'CheckApiKey']], function () {
 
-        Route::post('code', 'ApiController@storeCode');
+        Route::post('share-code', 'ApiController@storeCode');
         Route::post('like-code', 'ApiController@likeCode');
         Route::post('dislike-code', 'ApiController@dislikeCode');
         Route::post('store-comment', 'ApiController@storeComment');
