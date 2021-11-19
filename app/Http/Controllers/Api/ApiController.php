@@ -29,8 +29,8 @@ class ApiController extends Controller
 
     public function storeCode(Request $request)
     {
-        if (CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()) {
-            return redirect()->back()->with('error', 'Oops! Code exists already');;
+        if (CompanyCode::where('code', $request->code)->Where('name', $request->bet_name)->exists()) {
+            throw new Exception('error', 'Oops! Code exists already');;
         } else {
             $code = new CompanyCode;
             $code->user_id = Sentinel::getUser()->id;

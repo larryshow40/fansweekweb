@@ -21,19 +21,21 @@ use App\SubscriptionTransaction;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use App\Action\Subscription\VerifyTransaction;
+use Exception;
 
 class ApiController extends Controller
 {
 
     public function storeCode(Request $request)
     {
-        if (CompanyCode::where('code', $request->code)->Where('name', $request->name)->exists()) {
-            return redirect()->back()->with('error', 'Oops! Code exists already');;
+        if (CompanyCode::where('code', $request->code)->Where('name', $request->bet_name)->exists()) {
+            throw new Exception('error', 'Oops! Code exists already');;
         } else {
             $code = new CompanyCode;
             $code->user_id = Sentinel::getUser()->id;
-            $code->name = $request->name;
-            $code->code = $request->code;
+            $code->name = $request->bet_company;
+            $code->code = $request->bet_code;
+            $code->end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i');
             $code->save();
             return response()->json([
                 "status" => true,
