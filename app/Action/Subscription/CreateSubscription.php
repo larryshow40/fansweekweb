@@ -18,7 +18,7 @@ class CreateSubscription{
                 ],
                 'json' => [
                     "customer" => $email,
-                    "plan" => "PLN_8wa5t89ms15a8en"
+                    "plan" => "PLN_9ib2zgl76abcx3b"
                 ]
             ]
         );
@@ -37,7 +37,7 @@ class CreateSubscription{
                 $subscription->subscription_status = $data['status'];
                 $subscription->status = 1;
                 $subscription->next_payment_date = $data['next_payment_date'];
-                $subscription->plan_code = "PLN_8wa5t89ms15a8en";
+                $subscription->plan_code = "PLN_9ib2zgl76abcx3b";
                 $subscription->authorization = $data['authorization'];
                 $subscription->save();
             DB::commit();

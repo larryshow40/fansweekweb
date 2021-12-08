@@ -17,7 +17,7 @@ class InitializeTransaction{
 
                 'json' => [
                     "email" => Sentinel::getUser()->email,
-                    "amount"=> 100*100
+                    "amount"=> 1000*100
                 ]
 
             ]
