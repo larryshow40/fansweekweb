@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         $data = (new AllPredictions())->run($request);
 
-        $codes = CompanyCode::latest()->where('end_date', '<=', Carbon::now()->toDateTimeString())->take(5)->get();
+        $codes = CompanyCode::latest()->where('end_date', '>=', Carbon::now()->toDateTimeString())->take(5)->get();
 
         $codeGroups = $codes->groupBy(function ($date) {
             return Carbon::parse($date->updated_at)->format('d M, Y');
@@ -220,7 +220,7 @@ class HomeController extends Controller
 
     public function companyCodes()
     {
-        $codes = CompanyCode::where('end_date', '<=', Carbon::today()->toDateTimeString())->latest()->paginate(10);
+        $codes = CompanyCode::where('end_date', '>=', Carbon::today()->toDateTimeString())->latest()->paginate(10);
         $groups = $codes->groupBy(function ($date) {
             return Carbon::parse($date->updated_at)->format('d M, Y');
         });
