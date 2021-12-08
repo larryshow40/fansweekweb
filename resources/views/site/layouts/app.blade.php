@@ -75,7 +75,7 @@
         }
 
         .clicked {
-            background-color: rgb(67, 176, 27) !important;
+            background-color: rgb(176, 82, 27) !important;
             color:white !important;
         }
 
