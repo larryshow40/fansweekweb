@@ -5,7 +5,7 @@
 
 </style>
 <div class="sg-widget">
-    <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title bg-success">Today's Betting Codes
+    <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title bg-danger">Today's Betting Codes
     </h3>
     <div class="card-body py-0">
         <div class="text-right">
@@ -31,7 +31,7 @@
     </div>
     @foreach ($codeGroups as $key => $group)
         <div class="section-title my-2">
-            <h6 class="text-success">{{$key}}</h6>
+            <h6 class="text-danger">{{$key}}</h6>
         </div>
     @foreach ($group as $code)
         <div class="card bg-dark mb-1" style="color:white;">

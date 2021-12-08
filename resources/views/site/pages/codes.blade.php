@@ -12,7 +12,7 @@
 
                 @foreach ($groups as $key => $group)
                     <div class="section-title">
-                        <h6 class="text-success">{{$key}}</h6>
+                        <h6 class="text-danger">{{$key}}</h6>
                     </div>
                     <table class="table">
                             <thead>
