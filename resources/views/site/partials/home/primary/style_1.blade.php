@@ -146,15 +146,14 @@ $blockPosts = $posts->take(4);
                             <h1>Free Daily Tips and Prediction</h1>
                         </div>
                     </div> --}}
-                    <h2 style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-success">Free
-                        Daily Tips and Prediction</h2>
+                    <h2 id="prediction" style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-danger">Free Daily Tips and Prediction</h2>
                     <div class="text-right">
                         <form action="" method="POST">
                             @csrf
                             <div class="btn-group mb-2" role="group" aria-label="Basic example">
-                                <input type="submit" name="yesterday" value="Yesterday" class="btn {{request()->yesterday ? 'btn-success' : 'btn-secondary'}}">
-                                <input type="submit" name="today" value="Today" class="btn {{(!request()->tomorrow && !request()->yesterday) ? 'btn-success' : 'btn-secondary'}}">
-                                <input type="submit" name="tomorrow" value="Tomorrow" class="btn {{request()->tomorrow ? 'btn-success' : 'btn-secondary'}}">
+                                <input type="submit" name="yesterday" value="Yesterday" class="btn {{request()->yesterday ? 'btn-danger' : 'btn-secondary'}}">
+                                <input type="submit" name="today" value="Today" class="btn {{(!request()->tomorrow && !request()->yesterday) ? 'btn-danger' : 'btn-secondary'}}">
+                                <input type="submit" name="tomorrow" value="Tomorrow" class="btn {{request()->tomorrow ? 'btn-danger' : 'btn-secondary'}}">
                                 
                             </div>
 
@@ -168,7 +167,7 @@ $blockPosts = $posts->take(4);
                         {{-- </div> --}}
                         @foreach ($group->groupBy('competition_name') as $key => $subgroup)
                             <div class="section-title">
-                                <h6 class="text-success">{{ $mainkey }} {{ $key }}</h6>
+                                <h6 class="text-danger">{{ $mainkey }} {{ $key }}</h6>
                             </div>
                             <div class="table-responsive">
                                 <table class="table ">
@@ -210,7 +209,7 @@ $blockPosts = $posts->take(4);
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('view.stats', $data['id']) }}"
-                                                        class="btn btn-success btn-sm"> Stats</a>
+                                                        class="btn btn-danger btn-sm"> Stats</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -222,7 +221,7 @@ $blockPosts = $posts->take(4);
 
                     @endforeach
                     <div class="text-center">
-                        <a href="{{ route('predictions') }}" class="btn btn-success">View All</a>
+                        <a href="{{ route('predictions') }}" class="btn btn-danger">View All</a>
                     </div>
 
 

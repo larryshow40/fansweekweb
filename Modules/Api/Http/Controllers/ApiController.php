@@ -318,7 +318,7 @@ class ApiController extends Controller
                         "createdAt" => "2016-03-20T00:23:24.000Z",
                         "plan" => [
                             "name" => "Monthly retainer",
-                            "plan_code" => "PLN_8wa5t89ms15a8en",
+                            "plan_code" => "PLN_9ib2zgl76abcx3b",
                             "description" => null,
                             "amount" => 100,
                             "interval" => "monthly",

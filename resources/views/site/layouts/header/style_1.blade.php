@@ -109,26 +109,30 @@
 
                                 @if ($mainMenu->is_mega_menu == 'no')
                                     <li class="nav-item sg-dropdown">
-                                        <a href="{{ menuUrl($mainMenu) }}"
-                                            target="{{ $mainMenu->new_teb == 1 ? '_blank' : '' }}">{{ $mainMenu->label == 'gallery' ? __('gallery') : $mainMenu->label }}
-                                            @if (!blank($mainMenu->children))<span><i class="fa fa-angle-down" aria-hidden="true"></i></span>@endif </a>
-                                        <ul class="sg-dropdown-menu">
-                                            @foreach ($mainMenu->children as $child)
-                                                <li class=""><a href=" {{ menuUrl($child) }}"
-                                                    target="{{ $child->new_teb == 1 ? '_blank' : '' }}">
-                                                    {{ $child->label == 'gallery' ? __('gallery') : $child->label }}
-                                                    @if (!blank($child->children)) <span class="pull-right"><i class="fa fa-angle-right" aria-hidden="true"></i></span>@endif</a>
-                                                    <ul class="sg-dropdown-menu-menu">
-                                                        @foreach ($child->children as $subChild)
-                                                            <li class=""><a href=" {{ menuUrl($subChild) }}"
-                                                                target="{{ $subChild->new_teb == 1 ? '_blank' : '' }}">
-                                                                {{ $subChild->label == 'gallery' ? __('gallery') : $subChild->label }}</a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                        @if($mainMenu->label == "Prediction")
+                                            <a href="{{route('home')}}/#prediction">Prediction</a>
+                                        @else
+                                            <a href="{{ menuUrl($mainMenu) }}"
+                                                target="{{ $mainMenu->new_teb == 1 ? '_blank' : '' }}">{{ $mainMenu->label == 'gallery' ? __('gallery') : $mainMenu->label }}
+                                                @if (!blank($mainMenu->children))<span><i class="fa fa-angle-down" aria-hidden="true"></i></span>@endif </a>
+                                            <ul class="sg-dropdown-menu">
+                                                @foreach ($mainMenu->children as $child)
+                                                    <li class=""><a href=" {{ menuUrl($child) }}"
+                                                        target="{{ $child->new_teb == 1 ? '_blank' : '' }}">
+                                                        {{ $child->label == 'gallery' ? __('gallery') : $child->label }}
+                                                        @if (!blank($child->children)) <span class="pull-right"><i class="fa fa-angle-right" aria-hidden="true"></i></span>@endif</a>
+                                                        <ul class="sg-dropdown-menu-menu">
+                                                            @foreach ($child->children as $subChild)
+                                                                <li class=""><a href=" {{ menuUrl($subChild) }}"
+                                                                    target="{{ $subChild->new_teb == 1 ? '_blank' : '' }}">
+                                                                    {{ $subChild->label == 'gallery' ? __('gallery') : $subChild->label }}</a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     </li>
                                 @endif
 
