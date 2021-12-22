@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('paystack/webhook', 'ApiController@paystackWebhook');
+Route::get('paystack/callback', 'ApiController@paystackCallback');
 
     Route::group(['middleware' => ['jwt.verify', 'loginCheck', 'api.localization', 'CheckApiKey']], function () {
 
@@ -22,8 +24,7 @@ use Illuminate\Http\Request;
         Route::post('dislike-code', 'ApiController@dislikeCode');
         Route::post('store-comment', 'ApiController@storeComment');
         Route::get('list-codes', 'ApiController@listCodes');
-        Route::post('paystack/webhook', 'ApiController@paystackWebhook');
-        Route::get('paystack/callback', 'ApiController@paystackCallback');
+       
         Route::get('check-subscription', 'ApiController@checkSubscription');
     });
 

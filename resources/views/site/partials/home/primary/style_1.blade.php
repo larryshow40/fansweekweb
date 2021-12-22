@@ -10,7 +10,7 @@ $blockPosts = $posts->take(4);
                 @foreach ($breakingNewss as $post)
                     <li id="display-nothing">
                         <a href="{{ route('article.detail', ['id' => $post->slug]) }}">{!! \Illuminate\Support\Str::limit($post->title, 100) !!}</a>
-                    </li>
+                    </li>\
                 @endforeach
             </ul>
         </div>
