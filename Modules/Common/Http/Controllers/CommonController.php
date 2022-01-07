@@ -73,7 +73,7 @@ class CommonController extends Controller
 
     public function companyCode()
     {
-        $codes = CompanyCode::where('end_date', '>=', Carbon::now()->toDateTimeString())->get();
+        $codes = CompanyCode::paginate(10);
         return view('common::codes', compact('codes'));
     }
 
