@@ -19,6 +19,7 @@ active
               <th scope="col">#</th>
               <th scope="col">Company</th>
               <th scope="col">Code</th>
+              <th scope="col">End Date</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -28,6 +29,7 @@ active
                     <th scope="row">{{++$key}}</th>
                     <td>{{$code->name}}</td>
                     <td>{{$code->code}}</td>
+                    <td>{{$code->end_date}}</td>
                     <td>
                         <a class="btn btn-danger" href="{{route('code.destroy', $code->id)}}" onclick="return confirm('Are you sure you want to delete this company?')">Delete</a>
                         <a class="btn btn-success text-white" data-toggle="modal" data-target="#updateModal{{$code->id}}">Update</a>
@@ -68,6 +70,7 @@ active
               @endforeach
           </tbody>
     </table>
+    {{$codes->links()}}
 </div>
 
 

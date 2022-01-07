@@ -73,7 +73,7 @@ class CommonController extends Controller
 
     public function companyCode()
     {
-        $codes = CompanyCode::paginate(10);
+        $codes = CompanyCode::latest()->paginate(10);
         return view('common::codes', compact('codes'));
     }
 
