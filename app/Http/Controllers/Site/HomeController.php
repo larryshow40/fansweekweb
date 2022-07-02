@@ -40,7 +40,7 @@ class HomeController extends Controller
 
         // return $data;
 
-        $groups =  $data->groupBy('competition_cluster')->take(15);
+        $groups =  $data->groupBy('competition_cluster')->take(15) ?? [];
 
         // return $groups;
 
