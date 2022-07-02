@@ -66,6 +66,6 @@ class AllPredictions{
         $response = json_decode($response->getBody(),true);
 
         $data = collect($response['data']);
-        return $data;
+        return $data ?? [];
     }
 }

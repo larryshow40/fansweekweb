@@ -24,7 +24,7 @@ class ListMarkets{
 
         $data = collect($response['data']['allowed_for_your_subscription']);
 
-        return $data;
+        return $data ?? [];
     }
 }
 

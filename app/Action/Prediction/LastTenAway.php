@@ -23,7 +23,7 @@ class LastTenAway{
 
         $data = $response['data'];
 
-        return $data;
+        return $data ?? [];
     }
 }
 

@@ -23,7 +23,7 @@ class LastTenHome{
 
         $data = ($response['data']);
 
-        return $data;
+        return $data ?? [];
     }
 }
 

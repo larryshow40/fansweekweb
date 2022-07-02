@@ -24,7 +24,7 @@ class ListFederations{
 
         $data = collect($response['data']);
 
-        return $data;
+        return $data ?? [];
     }
 }
 

@@ -24,7 +24,7 @@ class SinglePrediction{
 
         $data = $response['data'][0];
 
-        return $data;
+        return $data ?? [];
     }
 }
 
