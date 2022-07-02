@@ -48,6 +48,7 @@ class AllPredictions{
     public function filter($request){
         $client = new Client(); //GuzzleHttp\Client
         $response = $client->get('https://football-prediction-api.p.rapidapi.com/api/v2/predictions/',[
+                'http_errors' => false,
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'x-rapidapi-key' => 'edmL7VpyK8msh29ZfiWpoBMyNAwAp1eM0RkjsnpfADSAsb6Tr5',

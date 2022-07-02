@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\Prediction;
 
 use GuzzleHttp\Client;
@@ -7,10 +8,14 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\BadResponseException;
 
-class HeadToHead{
-    public function run($id){
+class HeadToHead
+{
+    public function run($id)
+    {
         $client = new Client(); //GuzzleHttp\Client
-        $response = $client->get(('https://football-prediction-api.p.rapidapi.com/api/v2/head-to-head/'.$id),[
+        $response = $client->get(('https://football-prediction-api.p.rapidapi.com/api/v2/head-to-head/' . $id),
+            [
+                'http_errors' => false,
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'x-rapidapi-key' => 'edmL7VpyK8msh29ZfiWpoBMyNAwAp1eM0RkjsnpfADSAsb6Tr5',
@@ -19,14 +24,12 @@ class HeadToHead{
             ]
         );
 
-        $response = json_decode($response->getBody(),true);
+        $response = json_decode($response->getBody(), true);
 
-        if(array_key_exists('encounters', $response['data'])){
+        if (array_key_exists('encounters', $response['data'])) {
             return ($response['data']['encounters']);
         }
 
         return [];
     }
 }
-
-?>
