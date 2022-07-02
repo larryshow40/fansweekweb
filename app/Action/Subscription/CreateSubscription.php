@@ -18,7 +18,8 @@ class CreateSubscription{
                 ],
                 'json' => [
                     "customer" => $email,
-                    "plan" => "PLN_9ib2zgl76abcx3b"
+                    "plan" => "PLN_9ib2zgl76abcx3b",
+                    "start_date" => now()->addMonth(),
                 ]
             ]
         );
