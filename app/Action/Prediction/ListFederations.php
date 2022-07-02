@@ -25,11 +25,14 @@ class ListFederations
                 ]
             ]
         );
+        if ($response) {
+            $response = json_decode($response->getBody(), true);
 
-        $response = json_decode($response->getBody(), true);
+            $data = collect($response['data']);
 
-        $data = collect($response['data']);
-
-        return $data ?? [];
+            return $data;
+        } else {
+            return [];
+        }
     }
 }

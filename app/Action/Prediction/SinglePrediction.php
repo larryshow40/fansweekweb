@@ -24,11 +24,14 @@ class SinglePrediction
                 ]
             ]
         );
+        if ($response) {
+            $response = json_decode($response->getBody(), true);
 
-        $response = json_decode($response->getBody(), true);
+            $data = $response['data'][0];
 
-        $data = $response['data'][0];
-
-        return $data ?? [];
+            return $data;
+        } else {
+            return [];
+        }
     }
 }

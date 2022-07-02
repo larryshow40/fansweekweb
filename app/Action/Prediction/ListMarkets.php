@@ -25,11 +25,14 @@ class ListMarkets
                 ]
             ]
         );
+        if ($response) {
+            $response = json_decode($response->getBody(), true);
 
-        $response = json_decode($response->getBody(), true);
+            $data = collect($response['data']['allowed_for_your_subscription']);
 
-        $data = collect($response['data']['allowed_for_your_subscription']);
-
-        return $data ?? [];
+            return $data;
+        } else {
+            return [];
+        }
     }
 }

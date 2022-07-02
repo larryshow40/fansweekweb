@@ -23,11 +23,15 @@ class LastTenAway
                 ]
             ]
         );
+        if ($response) {
 
-        $response = json_decode($response->getBody(), true);
+            $response = json_decode($response->getBody(), true);
 
-        $data = $response['data'];
+            $data = $response['data'];
 
-        return $data ?? [];
+            return $data;
+        } else {
+            return [];
+        }
     }
 }

@@ -23,13 +23,15 @@ class HeadToHead
                 ]
             ]
         );
+        if ($response) {
 
-        $response = json_decode($response->getBody(), true);
+            $response = json_decode($response->getBody(), true);
 
-        if (array_key_exists('encounters', $response['data'])) {
-            return ($response['data']['encounters']);
+            if (array_key_exists('encounters', $response['data'])) {
+                return ($response['data']['encounters']);
+            }
+        } else {
+            return [];
         }
-
-        return [];
     }
 }
