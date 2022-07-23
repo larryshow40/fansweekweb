@@ -4,7 +4,7 @@
     }
 </style>
 <div class="sg-widget">
-    <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title mb-0 bg-danger">Today's Game
+    <h3 style="font-weight:bolder; font-size:19px;  color:white;" class="widget-title mb-0 bg-danger">Today's Prediction
         Codes
     </h3>
     <div class="card-body px-0 pb-0 pt-1">
