@@ -23,7 +23,7 @@ Route::group(
 			Route::get('filter/predictions', 'PredictionController@filter')->name('filter.predictions');
 
 			//Livescore 
-			Route::get('livescores', 'LiveScoreController@index');
+			Route::get('livescores', 'LiveScoreController@index')->name('livescore');
 
 
 			//start auth route

@@ -27,10 +27,11 @@ class LiveScoreController extends Controller
         $showPerPage = 10;
         
         $livescores = PaginationHelper::paginate($data, $showPerPage);
-        dd($livescores);
+        // dd($livescores);
 
     
-        return view('site.pages.predictions', compact('predictions', 'markets', 'federations'));
+        // return view('site.pages.livescore', compact('predictions', 'markets', 'federations'));
+        return view('site.pages.livescore', compact('livescores'));
     
      }
     
