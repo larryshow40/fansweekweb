@@ -21,6 +21,11 @@ Route::group(
 			Route::get('view-stats/{id}', 'HomeController@stats')->name('view.stats');
 			Route::get('all-predictions', 'PredictionController@index')->name('predictions')->middleware('loginCheck', 'PremiumUser');
 			Route::get('filter/predictions', 'PredictionController@filter')->name('filter.predictions');
+
+			//Livescore 
+			Route::get('livescores', 'LiveScoreController@index');
+
+
 			//start auth route
 			Route::get('/login', 'UserController@showLoginForm')->name('site.login.form');
 			Route::post('/login', 'UserController@login')->name('site.login');
