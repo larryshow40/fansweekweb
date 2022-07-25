@@ -16,12 +16,12 @@
 
                         @foreach($livescores as $key => $group)
             
-                            <div class="section-title">
+                            <!-- <div class="section-title">
                                 <h3 style="color:red;">{{$key}}</h3>
-                            </div>
-                            @foreach($group->groupBy('section') as $key => $subgroup) 
+                            </div> -->
+                            @foreach($group->groupBy('section.name') as $key => $subgroup) 
                                     <div class="section-title">
-                                        <h6 style="color:red;">{{$key}}</h6>
+                                        <h6 style="color:red;">{{$key}}/ </h6>
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table ">
@@ -29,10 +29,12 @@
                                                 <tr>
                                                     <th>Time</th>
                                                     <th>Home</th>
-                                                    <th>Away</th>
-                                                    <th>Prediction</th>
-                                                    <th>Odds</th>
                                                     <th>Score</th>
+                                                    <th>Away</th>
+                                                    <th>1</th>
+                                                    <th>X</th>
+                                                    <th>2</th>
+                                                    <!-- <th>Score</th> -->
                                                     <th>Stats</th>
                                                 </tr>
                                             </thead>
@@ -41,24 +43,30 @@
                                         
                                             @foreach ($subgroup as $data)
                                                 <tr class="table-active">
-                                                    <th scope="row">{{Carbon\Carbon::parse($data['start_at'])->format('h:i')}}</th>
+                                                    <th scope="row">{{Carbon\Carbon::parse($data['start_at'])->format('h:i')}} - {{$data['status']}}</th>
                                                     <td>
-                                                        {{$data['home_team'][$data['name']]}}
+                                                    {{$data['home_team']['name']}}
                                                     </td>
                                                 
                                                     <td>
-                                                    {{$data['away_team'][$data['name']]}}
+                                                    {{$data['home_score']['current'] ?? '-'}} -  {{$data['away_score']['current'] ?? '-'}}
+
                                                     </td>
-                                                    <!-- <td>{{$data['prediction']}}</td> -->
+                                                    <!-- {{$data['status']}} -->
+
                                                     <td>
-                                                        <!-- {{$data['odds'][$data['prediction']] ?? '-'}} -->
+                                                    {{$data['away_team']['name']}}
+
                                                     </td>
                                                     <td>
-                                                        <!-- @if($data['result'])
-                                                            {{$data['result']}}
-                                                        @else
-                                                        -
-                                                        @endif -->
+                                                    {{$data['main_odds']['outcome_1']['value'] ??'-'}}
+                                                       
+                                                    </td><td>
+                                                    {{$data['main_odds']['outcome_x']['value'] ??'-'}}
+                                                       
+                                                    </td><td>
+                                                    {{$data['main_odds']['outcome_2']['value'] ??'-'}}
+                                                       
                                                     </td>
                                                     <td>
                                                         <a href="{{route('view.stats', $data['id'])}}" class="btn btn-success btn-sm"> Stats</a>
