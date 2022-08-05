@@ -19,12 +19,12 @@ class LiveScoreController extends Controller
     public function index(){
     
         $data = (new AllGames())->run();
-        $data =  $data->groupBy('section');
+        // $data =  $data->groupBy('section');
         
         // $federations = (new ListFederations())->run();
         // $markets = (new ListMarkets())->run();
         
-        $showPerPage = 10;
+        $showPerPage = 100;
         
         $livescores = PaginationHelper::paginate($data, $showPerPage);
         // dd($livescores);
