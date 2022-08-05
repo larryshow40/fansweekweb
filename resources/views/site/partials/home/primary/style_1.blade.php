@@ -96,7 +96,7 @@ $blockPosts = $posts->take(10);
 
                     @endforeach
                     <div class="text-center">
-                        <a href="{{ route('predictions') }}" class="btn btn-danger">View All</a>
+                        <a href="{{ route('predictions') }}" class="btn btn-danger">View More</a>
                     </div>
 
 
