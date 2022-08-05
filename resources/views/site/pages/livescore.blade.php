@@ -4,7 +4,7 @@
     <div class="sg-main-content mb-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-7 col-lg-8 sg-sticky">
+                <div class="col-md- col-lg-24 sg-sticky">
                     <div class="theiaStickySidebar">
                         <div class="breaking-content d-flex">
                             <div class="section-title">
@@ -14,14 +14,19 @@
                         <div class="">
                         
 
-                        @foreach($livescores as $key => $group)
+                        {{-- @foreach($livescores as $key => $group) --}}
+                       
             
-                            <!-- <div class="section-title">
-                                <h3 style="color:red;">{{$key}}</h3>
-                            </div> -->
-                            @foreach($group->groupBy('section.name') as $key => $subgroup) 
+                            @foreach($livescores->groupBy('section.name') as $key => $subgroup) 
                                     <div class="section-title">
-                                        <h6 style="color:red;">{{$key}}/ </h6>
+                                            <h5 style="color:red;">
+                                    @php
+                                        $image = $subgroup[0]["league"]['logo'] ?? null;
+                                        $section = $subgroup[0]["section"]['name'] ?? null;
+                                        $league = $subgroup[0]["league"]['name'] ?? null;
+                                        echo '<img src='.$image.' alt="" border=3 height=30 width=30></img> ' .$section . ' | ' . $league;
+                                    @endphp
+                                    </h5>
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table ">
@@ -48,10 +53,10 @@
                                                     {{$data['home_team']['name']}}
                                                     </td>
                                                 
-                                                    <td>
-                                                    {{$data['home_score']['current'] ?? '-'}} -  {{$data['away_score']['current'] ?? '-'}}
+                                                    <th scope="row">
+                                                    {{$data['home_score']['current'] ?? ''}} -  {{$data['away_score']['current'] ?? ''}}
 
-                                                    </td>
+                                                    </th>
                                                     <!-- {{$data['status']}} -->
 
                                                     <td>
@@ -79,7 +84,7 @@
                                     </div>
                             @endforeach                             
                             
-                            @endforeach
+                            
 
                         {{ $livescores->links() }}
 
