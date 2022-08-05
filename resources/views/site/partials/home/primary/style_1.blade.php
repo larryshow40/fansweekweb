@@ -1,5 +1,5 @@
 @php
-$blockPosts = $posts->take(4);
+$blockPosts = $posts->take(15);
 @endphp
 
 <div class="sg-breaking-news">
@@ -21,39 +21,85 @@ $blockPosts = $posts->take(4);
 <div class="sg-home-section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
-                <div class="post-slider">
-                    @foreach ($sliderPosts as $post)
-                        <div class="sg-post featured-post">
-                            @include('site.partials.home.primary.slider')
-                            <div class="entry-content absolute">
-                                <div class="category">
-                                    <ul class="global-list">
-                                        @isset($post['category']->category_name)
-                                            <li>
-                                                <a
-                                                    href="{{ url('category', $post['category']->slug) }}">{{ $post['category']->category_name }}</a>
-                                            </li>
-                                        @endisset
-                                    </ul>
-                                </div>
-                                <h2 class="entry-title">
-                                    <a
-                                        href="{{ route('article.detail', ['id' => $post->slug]) }}">{!! \Illuminate\Support\Str::limit($post->title, 50) !!}</a>
-                                </h2>
-                                <div class="entry-meta">
-                                    <ul class="global-list">
-                                        <li>{{ __('post_by') }} <a
-                                                href="{{ route('site.author', ['id' => $post['user']->id]) }}">{{ data_get($post, 'user.first_name') }}</a>
-                                        </li>
-                                        <li><a
-                                                href="{{ route('article.date', date('Y-m-d', strtotime($post->updated_at))) }}">{{ $post->updated_at->format('F j, Y') }}</a>
-                                        </li>
-                                    </ul>
-                                </div>
+            <div class="col-md-7 col-lg-8 sg-sticky">
+                <div class="theiaStickySidebar">
+                   
+                    <h2 id="prediction" style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-danger">Free Daily Tips and Prediction</h2>
+                    <div class="text-right">
+                        <form action="" method="POST">
+                            @csrf
+                            <div class="btn-group mb-2" role="group" aria-label="Basic example">
+                                <input type="submit" name="yesterday" value="Yesterday" class="btn {{request()->yesterday ? 'btn-danger' : 'btn-secondary'}}">
+                                <input type="submit" name="today" value="Today" class="btn {{(!request()->tomorrow && !request()->yesterday) ? 'btn-danger' : 'btn-secondary'}}">
+                                <input type="submit" name="tomorrow" value="Tomorrow" class="btn {{request()->tomorrow ? 'btn-danger' : 'btn-secondary'}}">
+
                             </div>
-                        </div>
+
+                        </form>
+                    </div>
+
+                    @foreach ($groups as $mainkey => $group)
+
+                        @foreach ($group->groupBy('competition_name') as $key => $subgroup)
+                            <div class="section-title">
+                                <h6 class="text-danger">{{ $mainkey }} {{ $key }}</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Home</th>
+                                            <th>Away</th>
+                                            <th>Prediction</th>
+                                            <th>Odds</th>
+                                            <th>Score</th>
+                                            <th>Stats</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        @foreach ($subgroup as $data)
+                                            <tr class="table-active">
+                                                <th scope="row">
+                                                    {{ Carbon\Carbon::parse($data['start_date'])->format('h:i') }}</th>
+                                                <td>
+                                                    {{ $data['home_team'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $data['away_team'] }}
+                                                </td>
+                                                <td>{{ $data['prediction'] }}</td>
+                                                <td>
+                                                    {{ $data['odds'][$data['prediction']] ?? '-' }}
+                                                </td>
+                                                <td>
+                                                    @if ($data['result'])
+                                                        {{ $data['result'] }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('view.stats', $data['id']) }}"
+                                                        class="btn btn-danger btn-sm"> Stats</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        @endforeach
+
                     @endforeach
+                    <div class="text-center">
+                        <a href="{{ route('predictions') }}" class="btn btn-danger">View More</a>
+                    </div>
+
+
                 </div>
             </div>
             <div class="col-lg-4">
@@ -121,7 +167,9 @@ $blockPosts = $posts->take(4);
                     <div class="col-12 d-md-block d-lg-block d-xl-block d-none">
                         {{-- @include('site.partials.home.betting-code') --}}
                         {{-- @php dd($blockPosts); @endphp --}}
-                        {{-- @foreach ($blockPosts as $post)
+                    <h2 id="prediction" style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-danger">Latest News</h2>
+
+                        @foreach ($blockPosts as $post)
                             <div class="col-12">
                                 <div class="sg-post">
                                     <div class="entry-header">
@@ -174,7 +222,7 @@ $blockPosts = $posts->take(4);
 
                                 </div>
                             </div>
-                        @endforeach --}}
+                        @endforeach
 
                     </div>
                 </div>
@@ -194,16 +242,12 @@ $blockPosts = $posts->take(4);
 
 
 
-<div class="sg-main-content mb-4">
+{{-- <div class="sg-main-content mb-4">
     <div class="container">
         <div class="row">
             <div class="col-md-7 col-lg-8 sg-sticky">
                 <div class="theiaStickySidebar">
-                    {{-- <div class="breaking-content d-flex">
-                        <div class="section-title">
-                            <h1>Free Daily Tips and Prediction</h1>
-                        </div>
-                    </div> --}}
+                   
                     <h2 id="prediction" style="font-weight:bolder; font-size:19px; color:white;" class="widget-title bg-danger">Free Daily Tips and Prediction</h2>
                     <div class="text-right">
                         <form action="" method="POST">
@@ -220,9 +264,6 @@ $blockPosts = $posts->take(4);
 
                     @foreach ($groups as $mainkey => $group)
 
-                        {{-- <div class="section-title"> --}}
-                        {{-- <h3 style="color:red;">{{$key}}</h3> --}}
-                        {{-- </div> --}}
                         @foreach ($group->groupBy('competition_name') as $key => $subgroup)
                             <div class="section-title">
                                 <h6 class="text-danger">{{ $mainkey }} {{ $key }}</h6>
@@ -288,13 +329,12 @@ $blockPosts = $posts->take(4);
             <div class="col-md-5 col-lg-4 sg-sticky">
                 <div class="sg-sidebar theiaStickySidebar">
                     <div class="d-md-block d-lg-block d-xl-block d-none">
-                        {{-- @include('site.partials.home.betting-code') --}}
                     </div>
                     @include('site.partials.right_sidebar_widgets')
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 @include('common::addcodemodal');

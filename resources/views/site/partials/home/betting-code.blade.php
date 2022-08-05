@@ -80,5 +80,5 @@
     </div>
     @endforeach
     @endforeach
-    <a href="{{ route('all-codes') }}" class="btn btn-secondary btn-block">View All</a>
+    <a href="{{ route('all-codes') }}" class="btn btn-success btn-block">View All</a>
 </div>
