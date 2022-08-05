@@ -1,5 +1,5 @@
 @php
-$blockPosts = $posts->take(10);
+$blockPosts = $posts->take(15);
 @endphp
 
 <div class="sg-breaking-news">
