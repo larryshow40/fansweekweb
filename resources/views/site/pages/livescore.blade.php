@@ -35,7 +35,7 @@
                                                     <th>X</th>
                                                     <th>2</th>
                                                     <!-- <th>Score</th> -->
-                                                    <th>Stats</th>
+                                                    {{-- <th>Stats</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -68,9 +68,9 @@
                                                     {{$data['main_odds']['outcome_2']['value'] ??'-'}}
                                                        
                                                     </td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <a href="{{route('view.stats', $data['id'])}}" class="btn btn-success btn-sm"> Stats</a>
-                                                    </td>
+                                                    </td> --}}
                                                 </tr>
                                             @endforeach
                                         </tbody>
