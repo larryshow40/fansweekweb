@@ -46,7 +46,7 @@
                 <div style="font-weight: bolder; overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
                     class="col-4">{{ $code->name }}<br /></div>
                 <div class="col-4">
-                    <a style="text-decoration: none; color:lightblue;" href="{{ route('code.show', $code->id) }}">{{
+                    <a style="text-decoration: none; color:yellow;" href="{{ route('code.show', $code->id) }}">{{
                         $code->code }}<br /><i style="color: white;">{{ $code->user->first_name }}</i></a>
                 </div>
                 <div class="col-4 px-1">
