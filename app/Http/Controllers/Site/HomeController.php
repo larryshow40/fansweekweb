@@ -24,6 +24,8 @@ use App\CompanyCodeComment;
 use App\Dislike;
 use App\Like;
 use Carbon\Carbon;
+use App\Helpers\PaginationHelper;
+
 use Exception;
 
 class HomeController extends Controller
@@ -31,6 +33,7 @@ class HomeController extends Controller
     public function home(Request $request)
     {
         $data = (new AllPredictions())->run($request);
+        $primeData = [];
 
         $codes = CompanyCode::latest()->where('end_date', '>=', Carbon::now()->toDateTimeString())->take(7)->get();
 
@@ -38,9 +41,23 @@ class HomeController extends Controller
             return Carbon::parse($date->updated_at)->format('d M, Y');
         });
 
+        // $firstData = $data['Germany'];
+        //  return $Data;
+    $showPerPage = 100;
+
+
+    // $primePredictions = PaginationHelper::paginate($primeData, $showPerPage);
+   
+
+         
+
         // return $data;
 
         $groups = $data ? $data->groupBy('competition_cluster')->take(5) : [];
+
+
+        $primeData['Germany'] = $groups['Germany']?? [];
+        $primeData['England'] = $groups["England"]?? [];
 
         // return $groups;
 
@@ -215,7 +232,7 @@ class HomeController extends Controller
         $tracker->ip             = \Request()->ip();
         $tracker->agent_browser  = UserAgentBrowser(\Request()->header('User-Agent'));
         $tracker->save();
-        return view('site.pages.home', compact('codes', 'codeGroups', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
+        return view('site.pages.home', compact('codes', 'primePredictions', 'codeGroups', 'groups', 'primarySection', 'primarySectionPosts', 'categorySections', 'sliderPosts', 'video_posts', 'latest_posts', 'totalPostCount'));
     }
 
     public function companyCodes()

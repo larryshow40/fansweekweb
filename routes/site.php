@@ -24,6 +24,8 @@ Route::group(
 
 			//Livescore 
 			Route::get('livescores', 'LiveScoreController@index')->name('livescore');
+			Route::get('test-predictions', 'PredictionController@index')->name('test.predictions');
+
 
 
 			//start auth route

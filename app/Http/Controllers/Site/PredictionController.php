@@ -15,19 +15,33 @@ use Illuminate\Http\Request;
 class PredictionController extends Controller
 { 
   public function index(){
-    
+    $primeData = [];
     $data = (new AllPredictions())->run();
-    $data =  $data->groupBy('competition_cluster');
+    $data =  $data->groupBy('competition_cluster' );
+    // $firstData = $data['Germany'];
+
+    $primeData['Germany'] = $data['Germany']?? [];
+    $primeData['England'] = $data["England"]?? [];
+    return $primeData;
+    
+    // $data = $data->groupBy('competition_name"');
 
     $federations = (new ListFederations())->run();
     $markets = (new ListMarkets())->run();
 
-    $showPerPage = 10;
+    $showPerPage = 100;
 
     $predictions = PaginationHelper::paginate($data, $showPerPage);
+    $primePredictions = PaginationHelper::paginate($primeData, $showPerPage);
 
-    return view('site.pages.predictions', compact('predictions', 'markets', 'federations'));
+    //Test here 
+  
 
+            return $predictions ?? [];
+
+    
+
+    return view('site.pages.predictions', compact('predictions', 'markets', 'federations', 'primePredictions'));
  }
 
  public function filter(Request $request){

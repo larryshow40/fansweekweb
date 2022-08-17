@@ -37,6 +37,7 @@ $blockPosts = $posts->take(15);
 
                         </form>
                     </div>
+                   
 
                     @foreach ($groups as $mainkey => $group)
 
@@ -96,7 +97,7 @@ $blockPosts = $posts->take(15);
 
                     @endforeach
                     <div class="text-center">
-                        <a href="{{ route('predictions') }}" class="btn btn-danger">View More</a>
+                        <a href="{{ route('predictions') }}" class="btn btn-danger">View More1111</a>
                     </div>
 
 
